@@ -20,11 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Views\" />
-    <Folder Include="Areas\Usuario\Controllers\" />
-    <Folder Include="Areas\Usuario\Data\" />
     <Folder Include="Areas\Usuario\Models\" />
-    <Folder Include="Areas\Usuario\Views\" />
+    <Folder Include="Controllers\" />
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 

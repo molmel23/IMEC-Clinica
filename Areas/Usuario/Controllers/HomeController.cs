@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using ProyectoProgramadoLenguajes2024.Models;
 using System.Diagnostics;
 
-namespace ProyectoProgramadoLenguajes2024.Controllers
+namespace ProyectoProgramadoLenguajes2024.Areas.Usuario.Controllers
 {
+    [Area("Usuario")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
