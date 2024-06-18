@@ -8,11 +8,12 @@ using ProyectoProgramadoLenguajes2024.Models.ViewModels;
 namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class EspecialidadControlador : Controller
+    public class EspecialidadController : Controller
     {
+        #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
 
-        public EspecialidadControlador(IUnitOfWork unitOfWork)
+        public EspecialidadController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -23,6 +24,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         {
             return View();
         }
+        #endregion
 
 
         #region HTTP_GET
@@ -83,13 +85,13 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
         #endregion
 
-
         #region API
-
-
         public IActionResult GetAll()
         {
-            var especialidadList = _unitOfWork.Especialidades.GetAll();
+            var especialidadList = _unitOfWork.Especialidades.GetAll().Select(c => new {
+                c.Id,
+                c.Nombre
+            });
             return Json(new { data = especialidadList });
 
         }

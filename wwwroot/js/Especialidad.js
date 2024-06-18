@@ -1,5 +1,5 @@
-﻿namespace ProyectoProgramadoLenguajes2024.wwwroot
-var dataTable;
+﻿var dataTable;
+
 
 $(document).ready(function () {
     loadDataTable();
@@ -13,13 +13,12 @@ function loadDataTable() {
             "datatype": "json"
         },
         "columns": [
-            { "data": "nombre", "width": "15%" }
-            ,
-            {
-                "data": "id",
-                "render": function (data) {
-                    return `
-                            <a href="/Admin/Especialidad/upsert/${data}" class="btn btn-primary mx-2">
+            { "data": "nombre", "width": "15%" },
+                {
+                    "data": "id",
+                    "render": function (data) {
+                        return `
+                            <a href="/Admin/Especialidad/Upsert/${data}" class="btn btn-primary mx-2">
                                 <i class="bi bi-pencil-square"></i> Edit
                             </a>
 
@@ -27,8 +26,8 @@ function loadDataTable() {
                                 <i class="bi bi-trash"></i> Delete
                             </a>
                           `
+                    }
                 }
-            }
         ]
     });
 }
