@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Lista de Médicos Tratantes";
+}
+
+
+<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Lista de Médicos Tratantes
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-area="Admin" asp-controller="MedicoTratante" asp-action="Upsert" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Agregar Médico Tratante
+            </a>
+        </div>
+    </div>
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Numero de Colegiado</th>
+                <th>Nombre Completo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/MedicoTratante.js"></script>

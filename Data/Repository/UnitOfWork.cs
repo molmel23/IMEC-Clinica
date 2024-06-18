@@ -11,10 +11,14 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
         {
             _db = db;
             Especialidades = new EspecialidadRepository(_db);
-            
+            MedicoTratantes = new MedicoTratanteRepository(_db);
+            Especialidades_MedicoTratantes = new Especialidad_MedicoTratanteRepository(_db);
+
         }
 
         public IEspecialidadRepository Especialidades { get; }
+        public IMedicoTratanteRepository MedicoTratantes { get; }
+        public IEspecialidad_MedicoTratanteRepository Especialidades_MedicoTratantes { get; }
 
         public void Save()
         {

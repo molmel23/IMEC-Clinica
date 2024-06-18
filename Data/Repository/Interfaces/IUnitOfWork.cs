@@ -8,6 +8,8 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces
         void Save();
 
         IEspecialidadRepository Especialidades { get; }
+        IMedicoTratanteRepository MedicoTratantes { get; }
+        IEspecialidad_MedicoTratanteRepository Especialidades_MedicoTratantes { get; }
 
 
     }

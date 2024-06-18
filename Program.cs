@@ -4,6 +4,8 @@ using ProyectoProgramadoLenguajes2024.Data;
 using Microsoft.AspNetCore.Identity;
 using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 using ProyectoProgramadoLenguajes2024.Data.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using ProyectoProgramadoLenguajes2024.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +16,22 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+
+builder.Services.AddRazorPages();
 
 // importar
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();
@@ -35,10 +49,25 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Usuario}/{controller=Home}/{action=Index}/{id?}");
+
+// Redirectiona de la Home a la página de Login
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/Identity/Account/Login");
+        return;
+    }
+
+    await next();
+});
+
 
 app.Run();

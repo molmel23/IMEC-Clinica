@@ -12,8 +12,8 @@ using ProyectoProgramadoLenguajes2024.Data;
 namespace ProyectoProgramadoLenguajes2024.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240617125545_initialCreate")]
-    partial class initialCreate
+    [Migration("20240618205209_MedicoTratantesToDB")]
+    partial class MedicoTratantesToDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,11 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -140,6 +145,10 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -170,12 +179,10 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -212,12 +219,10 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -242,6 +247,56 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Especialidades");
+                });
+
+            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.Especialidad_MedicoTratante", b =>
+                {
+                    b.Property<int>("MedicoTratanteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EspecialidadId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedicoTratanteId", "EspecialidadId");
+
+                    b.HasIndex("EspecialidadId");
+
+                    b.ToTable("Especialidades_MedicoTratantes");
+                });
+
+            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.MedicoTratante", b =>
+                {
+                    b.Property<int>("NumeroColegiado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NumeroColegiado"));
+
+                    b.Property<string>("FotoURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreCompleto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("NumeroColegiado");
+
+                    b.ToTable("MedicoTratantes");
+                });
+
+            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("Cedula")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -293,6 +348,25 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.Especialidad_MedicoTratante", b =>
+                {
+                    b.HasOne("ProyectoProgramadoLenguajes2024.Models.Especialidad", "Especialidad")
+                        .WithMany()
+                        .HasForeignKey("EspecialidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProyectoProgramadoLenguajes2024.Models.MedicoTratante", "MedicoTratante")
+                        .WithMany()
+                        .HasForeignKey("MedicoTratanteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Especialidad");
+
+                    b.Navigation("MedicoTratante");
                 });
 #pragma warning restore 612, 618
         }

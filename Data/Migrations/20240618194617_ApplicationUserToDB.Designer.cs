@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoProgramadoLenguajes2024.Data;
 
@@ -11,9 +12,11 @@ using ProyectoProgramadoLenguajes2024.Data;
 namespace ProyectoProgramadoLenguajes2024.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240618194617_ApplicationUserToDB")]
+    partial class ApplicationUserToDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,42 +249,6 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                     b.ToTable("Especialidades");
                 });
 
-            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.Especialidad_MedicoTratante", b =>
-                {
-                    b.Property<int>("MedicoTratanteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EspecialidadId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MedicoTratanteId", "EspecialidadId");
-
-                    b.HasIndex("EspecialidadId");
-
-                    b.ToTable("Especialidades_MedicoTratantes");
-                });
-
-            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.MedicoTratante", b =>
-                {
-                    b.Property<int>("NumeroColegiado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NumeroColegiado"));
-
-                    b.Property<string>("FotoURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("NumeroColegiado");
-
-                    b.ToTable("MedicoTratantes");
-                });
-
             modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -345,25 +312,6 @@ namespace ProyectoProgramadoLenguajes2024.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ProyectoProgramadoLenguajes2024.Models.Especialidad_MedicoTratante", b =>
-                {
-                    b.HasOne("ProyectoProgramadoLenguajes2024.Models.Especialidad", "Especialidad")
-                        .WithMany()
-                        .HasForeignKey("EspecialidadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoProgramadoLenguajes2024.Models.MedicoTratante", "MedicoTratante")
-                        .WithMany()
-                        .HasForeignKey("MedicoTratanteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Especialidad");
-
-                    b.Navigation("MedicoTratante");
                 });
 #pragma warning restore 612, 618
         }

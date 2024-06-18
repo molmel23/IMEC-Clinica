@@ -7,8 +7,6 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
     {
         private ApplicationDbContext _db;
 
-
-
         public EspecialidadRepository(ApplicationDbContext db) : base(db)
         {
         _db = db;

@@ -15,15 +15,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ProyectoProgramadoLenguajes2024.Models;
+using ProyectoProgramadoLenguajes2024.Utilities;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
@@ -31,6 +36,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
@@ -43,6 +49,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -97,11 +104,46 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string? role { get; set; }
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> roleList { get; set; }
+            public string? Nombre { get; set; }
+            public int Cedula { get; set; }
+        }
+
+        private void CreateRoles()
+        {
+            if (!_roleManager.RoleExistsAsync(Roles.Admin).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Roles.Admin)).GetAwaiter().GetResult();
+            }
+
+            if (!_roleManager.RoleExistsAsync(Roles.Medico).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Roles.Medico)).GetAwaiter().GetResult();
+            }
+
+            if (!_roleManager.RoleExistsAsync(Roles.Usuario).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(Roles.Usuario)).GetAwaiter().GetResult();
+            }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            CreateRoles();
+            Input = new()
+            {
+                roleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -116,11 +158,26 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.Nombre = Input.Nombre;
+                user.Cedula = Input.Cedula;
+
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (string.IsNullOrEmpty(Input.role))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Usuario);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.role);
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -154,11 +211,11 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
