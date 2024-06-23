@@ -6,6 +6,8 @@ using ProyectoProgramadoLenguajes2024.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using ProyectoProgramadoLenguajes2024.Utilities;
+using System.Collections;
+using System.Linq;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 {
@@ -35,7 +37,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region HTTP_GET
 
         [HttpGet]
-        public IActionResult Upsert(int? numeroColegiado)
+        public IActionResult Upsert(int? id)
         {
             Especialidad_MedicoTratanteVM myMedico = new Especialidad_MedicoTratanteVM
             {
@@ -58,9 +60,9 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 }
             };
 
-            if (numeroColegiado != null && numeroColegiado != 0)
+            if (id != null && id != 0)
             {
-                myMedico.MedicoTratanteVM.MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == numeroColegiado);
+                myMedico.MedicoTratanteVM.MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id);
                 if (myMedico.MedicoTratanteVM.MedicoTratante == null)
                 {
                     return NotFound();
@@ -70,17 +72,16 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
             return View(myMedico);
         }
 
-
-
         #endregion
+
 
         #region HTTP_POST
 
         [HttpPost]
         public IActionResult Upsert(Especialidad_MedicoTratanteVM especialidad_MedicoTratanteVM, IFormFile? file)
         {
-            /*if (ModelState.IsValid)
-            {*/
+            if (ModelState.IsValid)
+            {
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (file != null)
                 {
@@ -105,8 +106,8 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                     especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = @"images\medicos\" + fileName + extension;
                 }
 
-            var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado);
-            if (medicoTratante == null)
+                var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado);
+                if (medicoTratante == null)
                 {
                     _unitOfWork.MedicoTratantes.Add(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
                 }
@@ -121,23 +122,25 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 TempData["success"] = "Médico Tratante agregado exitosamente";
 
                 return RedirectToAction("Index");
-            /*}
+            }
 
-
-            return RedirectToAction("Index");*/
+            return RedirectToAction("Index");
 
         }
 
         public void addEspecialidad_MedicoTratante(int numeroColegiado, int especialidad)
         {
-            Especialidad_MedicoTratante especialidadToAdd = new()
+            if (especialidad != 0 || especialidad != null)
             {
-                MedicoTratanteId = numeroColegiado,
-                EspecialidadId = especialidad
-            };
+                Especialidad_MedicoTratante especialidadToAdd = new()
+                {
+                    MedicoTratanteId = numeroColegiado,
+                    EspecialidadId = especialidad
+                };
 
-            _unitOfWork.Especialidades_MedicoTratantes.Add(especialidadToAdd);
-            _unitOfWork.Save();
+                _unitOfWork.Especialidades_MedicoTratantes.Add(especialidadToAdd);
+                _unitOfWork.Save();
+            }
         }
 
         #endregion
@@ -145,8 +148,58 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region API
         public IActionResult GetAll()
         {
-            var medicoTratanteList = _unitOfWork.MedicoTratantes.GetAll();
+            var medicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(c => new
+            {
+                c.NumeroColegiado,
+                c.NombreCompleto
+            });
             return Json(new { data = medicoTratanteList });
+
+        }
+
+        [HttpGet]
+        public IActionResult Detalles(int? id)
+        {
+            Especialidad_MedicoTratanteVM myMedico = new Especialidad_MedicoTratanteVM
+            {
+                MedicoTratanteVM = new MedicoTratanteVM
+                {
+                    MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id),
+                    MedicoTratenteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                    {
+                        Text = i.NombreCompleto,
+                        Value = i.NumeroColegiado.ToString()
+                    }).ToList()
+                },
+                EspecialidadVM = new EspecialidadVM
+                {
+                }
+            };
+
+            List<Especialidad_MedicoTratante> especialidadesMedico = _unitOfWork.Especialidades_MedicoTratantes.GetAll().Where(x => x.MedicoTratanteId == id).ToList();
+
+            myMedico.EspecialidadVM = new EspecialidadVM
+            {
+                Especialidad = _unitOfWork.Especialidades.Get(x => x.Id == myMedico.MedicoTratanteVM.Especialidad),
+                EspecialidadList = _unitOfWork.Especialidades.GetAll().Select(e => new SelectListItem
+                {
+                    Text = e.Nombre,
+                    Value = e.Id.ToString()
+                }).ToList()
+            };
+
+            myMedico.EspecialidadVM.EspecialidadList = myMedico.EspecialidadVM.EspecialidadList.Where(x => especialidadesMedico.Any(y => y.EspecialidadId == int.Parse(x.Value))).ToList();
+
+            if (id != null && id != 0)
+            {
+                myMedico.MedicoTratanteVM.MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id);
+                if (myMedico.MedicoTratanteVM.MedicoTratante == null)
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(myMedico);
         }
 
 

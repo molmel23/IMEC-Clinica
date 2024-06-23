@@ -13,23 +13,27 @@ function loadDataTable() {
             "datatype": "json"
         },
         "columns": [
-            { "data": "NombreCompleto", "width": "15%" },
-            { "data": "FotoURL", "width": "15%" },
+            { "data": "numeroColegiado", "width": "20%" },
+            { "data": "nombreCompleto", "width": "20%" },
             {
-                "data": "numeroColegiado",
+                "data": "numeroColegiado", 
                 "render": function (data) {
                     return `
-                            <a href="/Admin/MedicoTratante/Upsert/${data}" class="btn btn-primary mx-2">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </a>
+                    <a href="/Admin/MedicoTratante/Detalles/${data}" class="btn btn-success mx-2">
+                        <i class="bi bi-eye"></i> Detalles
 
-                            <a onClick=Delete(${data}) class="btn btn-danger mx-2">
-                                <i class="bi bi-trash"></i> Delete
-                            </a>
-                          `
-                }
+                    <a href="/Admin/MedicoTratante/Upsert/${data}" class="btn btn-primary mx-2">
+                        <i class="bi bi-pencil-square"></i> Editar
+                    </a>
+
+                    <a onClick=Delete(${data}) class="btn btn-danger mx-2">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                  `
+                }, "width": "35%"
             }
         ]
+
     });
 }
 

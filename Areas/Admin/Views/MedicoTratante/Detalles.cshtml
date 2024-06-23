@@ -1,0 +1,45 @@
+﻿﻿@using System.Globalization;
+@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model Especialidad_MedicoTratanteVM
+
+<div class="card  container pt-4">
+    <div class="card-header bg-primary text-light ml-0  row ">
+        <div class="col-12 col-md-6">
+            <h1 class="text-dark-50">@Model.MedicoTratanteVM.MedicoTratante.NombreCompleto</h1>
+
+        </div>
+    </div>
+    <div class="card-body row container">
+        <div class="container rounded p-2">
+            <div class="row">
+                <div class="col-8 col-lg-8">
+                    <div class="row pl-2">
+                        <p class="text-black" style="font-size: 1.5rem;">
+                            <strong>Numero de Colegiado:</strong> @Model.MedicoTratanteVM.MedicoTratante.NumeroColegiado
+                            <br />
+                            <strong>Especialidades:</strong>
+                            @foreach (var item in Model.EspecialidadVM.EspecialidadList)
+                            {
+                                <span>@item.Text</span>
+
+                                <br />
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                    <img src="~/@Model.MedicoTratanteVM.MedicoTratante.FotoURL" width="100%" class="rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-12 col-md-6 pb-1">
+                <a class="btn btn-primary w-100 d-flex align-items-center justify-content-center" style="height: 50px;" asp-area="Admin" asp-controller="MedicoTratante" asp-action="Index">
+                    Volver a la lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

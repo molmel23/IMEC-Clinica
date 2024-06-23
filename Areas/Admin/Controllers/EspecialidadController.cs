@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 using ProyectoProgramadoLenguajes2024.Models;
 using ProyectoProgramadoLenguajes2024.Models.ViewModels;
+using ProyectoProgramadoLenguajes2024.Utilities;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public class EspecialidadController : Controller
     {
         #region Properties_Constructor

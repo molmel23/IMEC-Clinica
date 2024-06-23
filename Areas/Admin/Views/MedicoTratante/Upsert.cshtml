@@ -4,6 +4,7 @@
 
 <form method="post" enctype="multipart/form-data">
 
+    <input hidden asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" />
     <input hidden asp-for="MedicoTratanteVM.MedicoTratante.FotoURL" />
 
     <div class="border p-3 mt-4">
@@ -32,7 +33,7 @@
             </div>
             <div class="form-floating mb-3">
                 <select asp-for="MedicoTratanteVM.Especialidad" asp-items="@Model.EspecialidadVM.EspecialidadList" class="form-select">
-                    <option disabled selected> --- Selecccionar Rol --- </option>
+                    <option disabled selected> --- Selecccionar Especialidad --- </option>
                 </select>
             </div>
 
