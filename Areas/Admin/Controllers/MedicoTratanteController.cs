@@ -18,11 +18,11 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
         private IWebHostEnvironment _webHostEnvironment;
-        public string especialidad { get; set; }
 
-        public MedicoTratanteController(IUnitOfWork unitOfWork)
+        public MedicoTratanteController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -37,29 +37,39 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Upsert(int? numeroColegiado)
         {
-            MedicoTratanteVM myMedico = new()
+            Especialidad_MedicoTratanteVM myMedico = new Especialidad_MedicoTratanteVM
             {
-                MedicoTratante = new MedicoTratante(),
-                MedicoTratenteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                MedicoTratanteVM = new MedicoTratanteVM
                 {
-                    Text = i.NombreCompleto,
-                    Value = i.NumeroColegiado.ToString()
-                }).ToList()
+                    MedicoTratante = new MedicoTratante(),
+                    MedicoTratenteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                    {
+                        Text = i.NombreCompleto,
+                        Value = i.NumeroColegiado.ToString()
+                    }).ToList()
+                },
+                EspecialidadVM = new EspecialidadVM
+                {
+                    EspecialidadList = _unitOfWork.Especialidades.GetAll().Select(e => new SelectListItem
+                    {
+                        Text = e.Nombre,
+                        Value = e.Id.ToString()
+                    }).ToList()
+                }
             };
 
-            if (numeroColegiado == null || numeroColegiado == 0)
+            if (numeroColegiado != null && numeroColegiado != 0)
             {
-                return View(myMedico);
-            }
-
-            myMedico.MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == numeroColegiado);
-            if (myMedico.MedicoTratante == null)
-            {
-                return NotFound();
+                myMedico.MedicoTratanteVM.MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == numeroColegiado);
+                if (myMedico.MedicoTratanteVM.MedicoTratante == null)
+                {
+                    return NotFound();
+                }
             }
 
             return View(myMedico);
         }
+
 
 
         #endregion
@@ -67,57 +77,63 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region HTTP_POST
 
         [HttpPost]
-        public IActionResult Upsert(Especialidad_MedicoTratanteVM _especialidad_MedicoTratanteVM, IFormFile? file)
+        public IActionResult Upsert(Especialidad_MedicoTratanteVM especialidad_MedicoTratanteVM, IFormFile? file)
         {
-
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (file != null)
                 {
                     string fileName = Guid.NewGuid().ToString();
                     string extension = Path.GetExtension(file.FileName);
-                    var uploads = Path.Combine(wwwRootPath, @"images\vehicles");
+                    var uploads = Path.Combine(wwwRootPath, @"images\medicos");
 
-                    if (_especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL != null)// Update
+                    if (especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL != null)
                     {
-                        var oldImageUrl = Path.Combine(wwwRootPath, _especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL);
-
+                        var oldImageUrl = Path.Combine(wwwRootPath, especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL);
                         if (System.IO.File.Exists(oldImageUrl))
+                        {
                             System.IO.File.Delete(oldImageUrl);
+                        }
                     }
-
 
                     using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
 
-                    _especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = @"images\vehicles\" + fileName + extension;
+                    especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = @"images\medicos\" + fileName + extension;
                 }
 
-                if (_especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado == 0)
-                    _unitOfWork.MedicoTratantes.Add(_especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+            var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado);
+            if (medicoTratante == null)
+                {
+                    _unitOfWork.MedicoTratantes.Add(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+                }
                 else
-                    _unitOfWork.MedicoTratantes.Update(_especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+                {
+                    _unitOfWork.MedicoTratantes.Update(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+                }
 
                 _unitOfWork.Save();
 
-                addEspecialidad_MedicoTratante(_especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado, _especialidad_MedicoTratanteVM.MedicoTratanteVM.NombreEspecialidad);
+                addEspecialidad_MedicoTratante(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado, especialidad_MedicoTratanteVM.MedicoTratanteVM.Especialidad);
                 TempData["success"] = "Médico Tratante agregado exitosamente";
 
-            }
+                return RedirectToAction("Index");
+            /*}
 
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index");*/
 
         }
 
-        public void addEspecialidad_MedicoTratante(int numeroColegiado, string especialidad)
+        public void addEspecialidad_MedicoTratante(int numeroColegiado, int especialidad)
         {
             Especialidad_MedicoTratante especialidadToAdd = new()
             {
                 MedicoTratanteId = numeroColegiado,
-                EspecialidadId = _unitOfWork.Especialidades.Get(x => x.Nombre == especialidad).Id
+                EspecialidadId = especialidad
             };
 
             _unitOfWork.Especialidades_MedicoTratantes.Add(especialidadToAdd);
@@ -129,14 +145,8 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region API
         public IActionResult GetAll()
         {
-            var medicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(c => new
-            {
-                c.NumeroColegiado,
-                c.NombreCompleto,
-                c.FotoURL
-            });
+            var medicoTratanteList = _unitOfWork.MedicoTratantes.GetAll();
             return Json(new { data = medicoTratanteList });
-
         }
 
 

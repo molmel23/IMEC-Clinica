@@ -12,7 +12,7 @@ namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
         public IEnumerable<SelectListItem> MedicoTratenteList { get; set; }
 
         [ValidateNever]
-        public string NombreEspecialidad { get; set; }
+        public int Especialidad { get; set; }
 
     }
 }

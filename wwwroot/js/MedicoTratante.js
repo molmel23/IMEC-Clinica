@@ -14,8 +14,9 @@ function loadDataTable() {
         },
         "columns": [
             { "data": "NombreCompleto", "width": "15%" },
+            { "data": "FotoURL", "width": "15%" },
             {
-                "data": "NumeroColegiado",
+                "data": "numeroColegiado",
                 "render": function (data) {
                     return `
                             <a href="/Admin/MedicoTratante/Upsert/${data}" class="btn btn-primary mx-2">

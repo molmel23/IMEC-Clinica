@@ -2,9 +2,9 @@
 @model Especialidad_MedicoTratanteVM
 <partial name="_Notifications" />
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 
-    <input hidden asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" />
+    <input hidden asp-for="MedicoTratanteVM.MedicoTratante.FotoURL" />
 
     <div class="border p-3 mt-4">
         <div class="row pb-2">
@@ -16,22 +16,22 @@
         <div class="mb-3">
 
             <div class="mb-3">
-                <label asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="p-0"></label>
-                <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="text" class="form-control" />
+                <label asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="p-0">Número de Colegiado</label>
+                <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="number" class="form-control" />
                 <span asp-validation-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="MedicoTratanteVM.MedicoTratante.NombreCompleto" class="p-0"></label>
+                <label asp-for="MedicoTratanteVM.MedicoTratante.NombreCompleto" class="p-0">Nombre Completo</label>
                 <input asp-for="MedicoTratanteVM.MedicoTratante.NombreCompleto" type="text" class="form-control" />
                 <span asp-validation-for="MedicoTratanteVM.MedicoTratante.NombreCompleto" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="MedicoTratanteVM.MedicoTratante.FotoURL" class="p-0">Picture</label>
+                <label asp-for="MedicoTratanteVM.MedicoTratante.FotoURL" class="p-0">Foto</label>
                 <input id="uploadBox" name="file" type="file" class="form-control" />
                 <span asp-validation-for="MedicoTratanteVM.MedicoTratante.FotoURL" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <select asp-for="MedicoTratanteVM.NombreEspecialidad" asp-items="@Model.EspecialidadVM.EspecialidadList" class="form-select">
+                <select asp-for="MedicoTratanteVM.Especialidad" asp-items="@Model.EspecialidadVM.EspecialidadList" class="form-select">
                     <option disabled selected> --- Selecccionar Rol --- </option>
                 </select>
             </div>
@@ -39,6 +39,7 @@
             <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
             <a asp-controller="MedicoTratante" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
         </div>
+    </div>
 
 
 </form>
