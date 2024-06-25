@@ -4,5 +4,6 @@
     {
         public EspecialidadVM EspecialidadVM { get; set; }
         public MedicoTratanteVM MedicoTratanteVM { get; set; }
+
     }
 }

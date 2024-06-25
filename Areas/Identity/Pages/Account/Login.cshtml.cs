@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using ProyectoProgramadoLenguajes2024.Utilities;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
 {
@@ -103,8 +104,11 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Admin/Especialidad/Index");
+            returnUrl ??= Url.Content("/");
 
+      
+
+  
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
@@ -115,6 +119,19 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    // Comprobar el rol del usuario
+                    if (User.IsInRole(Roles.Medico))
+                    {
+                        returnUrl = Url.Content("~/Medicina/Bienvenida/Index");
+                    }
+                    else if (User.IsInRole(Roles.Admin))
+                    {
+                            returnUrl = Url.Content("~/Admin/Bienvenida/Index");
+                        }
+                    
+
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

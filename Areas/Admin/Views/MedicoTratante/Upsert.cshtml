@@ -31,11 +31,13 @@
                 <input id="uploadBox" name="file" type="file" class="form-control" />
                 <span asp-validation-for="MedicoTratanteVM.MedicoTratante.FotoURL" class="text-danger"></span>
             </div>
+
             <div class="form-floating mb-3">
                 <select asp-for="MedicoTratanteVM.Especialidad" asp-items="@Model.EspecialidadVM.EspecialidadList" class="form-select">
                     <option disabled selected> --- Selecccionar Especialidad --- </option>
                 </select>
             </div>
+
 
             <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
             <a asp-controller="MedicoTratante" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>

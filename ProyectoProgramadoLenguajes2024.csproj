@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Usuario\Models\**" />
+    <Compile Remove="Areas\Medicina\Models\**" />
     <Compile Remove="Controllers\**" />
-    <Content Remove="Areas\Usuario\Models\**" />
+    <Content Remove="Areas\Medicina\Models\**" />
     <Content Remove="Controllers\**" />
-    <EmbeddedResource Remove="Areas\Usuario\Models\**" />
+    <EmbeddedResource Remove="Areas\Medicina\Models\**" />
     <EmbeddedResource Remove="Controllers\**" />
-    <None Remove="Areas\Usuario\Models\**" />
+    <None Remove="Areas\Medicina\Models\**" />
     <None Remove="Controllers\**" />
   </ItemGroup>
 
@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Usuario\Controllers\" />
+    <Folder Include="Areas\Usuario\Data\" />
+    <Folder Include="Areas\Usuario\Models\" />
+    <Folder Include="Areas\Usuario\Views\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\images\medicos\" />
   </ItemGroup>

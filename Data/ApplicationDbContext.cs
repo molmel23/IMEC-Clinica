@@ -17,6 +17,7 @@ namespace ProyectoProgramadoLenguajes2024.Data
         public DbSet<Especialidad_MedicoTratante> Especialidades_MedicoTratantes { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<Padecimiento> Padecimiento { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
