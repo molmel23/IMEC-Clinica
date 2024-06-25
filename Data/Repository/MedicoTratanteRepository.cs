@@ -15,13 +15,6 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
 
         public void Update(MedicoTratante medicoTratante)
         {
-
-            var entry = _db.Entry(medicoTratante);
-            if (entry.State == EntityState.Detached)
-            {
-                _db.Attach(medicoTratante);
-                entry.State = EntityState.Modified;
-            }
             _db.MedicoTratantes.Update(medicoTratante);
 
         }

@@ -61,5 +61,10 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
         {
             dbSet.RemoveRange(entities);
         }
+
+        public void Detach(T entity)
+        {
+            _db.Entry(entity).State = EntityState.Detached;
+        }
     }
 }

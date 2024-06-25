@@ -15,10 +15,16 @@
 
     <div class="border p-3 mt-4">
         <div class="mb-3">
-
             <div class="mb-3">
                 <label asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="p-0">Número de Colegiado</label>
-                <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="number" class="form-control" />
+                @if (Model.MedicoTratanteVM.MedicoTratante.NumeroColegiado != 0)
+                {
+                    <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="number" class="form-control" readonly />
+                }
+                else
+                {
+                    <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="number" class="form-control" />
+                }
                 <span asp-validation-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -34,7 +40,7 @@
 
             <div class="form-floating mb-3">
                 <select asp-for="MedicoTratanteVM.Especialidad" asp-items="@Model.EspecialidadVM.EspecialidadList" class="form-select">
-                    <option disabled selected> --- Selecccionar Especialidad --- </option>
+                    <option value="0">--- Selecccionar Especialidad ---</option>
                 </select>
             </div>
 

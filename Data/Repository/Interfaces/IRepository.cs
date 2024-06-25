@@ -15,5 +15,8 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces
 
         void RemoveRange(IEnumerable<T> entities);
 
+        void Detach(T entity);
+
+
     }
 }
