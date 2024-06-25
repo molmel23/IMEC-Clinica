@@ -35,7 +35,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
 
         #region HTTP_GET
-
+        
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
@@ -80,51 +80,51 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(Especialidad_MedicoTratanteVM especialidad_MedicoTratanteVM, IFormFile? file)
         {
-            if (ModelState.IsValid)
+            // if (ModelState.IsValid)
+            //{
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            if (file != null)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = Path.GetExtension(file.FileName);
-                    var uploads = Path.Combine(wwwRootPath, @"images\medicos");
+                string fileName = Guid.NewGuid().ToString();
+                string extension = Path.GetExtension(file.FileName);
+                var uploads = Path.Combine(wwwRootPath, @"images\medicos");
 
-                    if (especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL != null)
+                if (especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL != null)
+                {
+                    var oldImageUrl = Path.Combine(wwwRootPath, especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL);
+                    if (System.IO.File.Exists(oldImageUrl))
                     {
-                        var oldImageUrl = Path.Combine(wwwRootPath, especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL);
-                        if (System.IO.File.Exists(oldImageUrl))
-                        {
-                            System.IO.File.Delete(oldImageUrl);
-                        }
+                        System.IO.File.Delete(oldImageUrl);
                     }
-
-                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-
-                    especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = @"images\medicos\" + fileName + extension;
                 }
 
-                var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado);
-                if (medicoTratante == null)
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                 {
-                    _unitOfWork.MedicoTratantes.Add(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
-                }
-                else
-                {
-                    _unitOfWork.MedicoTratantes.Update(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+                    file.CopyTo(fileStream);
                 }
 
-                _unitOfWork.Save();
-
-                addEspecialidad_MedicoTratante(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado, especialidad_MedicoTratanteVM.MedicoTratanteVM.Especialidad);
-                TempData["success"] = "Médico Tratante agregado exitosamente";
-
-                return RedirectToAction("Index");
+                especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = @"images\medicos\" + fileName + extension;
             }
 
+            var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado);
+            if (medicoTratante == null)
+            {
+                _unitOfWork.MedicoTratantes.Add(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+            }
+            else
+            {
+                _unitOfWork.MedicoTratantes.Update(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante);
+            }
+
+            _unitOfWork.Save();
+
+            addEspecialidad_MedicoTratante(especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.NumeroColegiado, especialidad_MedicoTratanteVM.MedicoTratanteVM.Especialidad);
+            TempData["success"] = "Médico Tratante agregado exitosamente";
+
             return RedirectToAction("Index");
+            //}
+
+            //return RedirectToAction("Index");
 
         }
 
