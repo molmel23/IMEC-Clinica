@@ -18,6 +18,12 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
             Tratamiento = new TratamientoRepository(_db);
             Medicamento = new MedicamentoRepository(_db);
             Pacientes = new PacienteRepository(_db);
+            Examenes = new ExamenRepository(_db);
+            Expedientes = new ExpedienteRepository(_db);
+            HistorialesClinicos = new HistorialClinicoRepository(_db);
+            NotasMedicas = new NotaMedicaRepository(_db);
+            ResultadosExamenes = new ResultadosExamenesRepository(_db);
+
 
         }
 
@@ -28,6 +34,14 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
         public ITratamientoRepository Tratamiento { get; }
         public IMedicamentoRepository Medicamento { get; }
         public IPacienteRepository Pacientes { get; }
+        public IExamenRepository Examenes { get; }
+        public IExpedienteRepository Expedientes { get; }
+        public IHistorialClinicoRepository HistorialesClinicos { get; }
+        public INotaMedicaRepository NotasMedicas { get; }
+        public IResultadosExamenesRepository ResultadosExamenes { get; }
+
+
+
 
         public void Save()
         {

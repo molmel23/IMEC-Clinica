@@ -19,6 +19,11 @@ namespace ProyectoProgramadoLenguajes2024.Data
         public DbSet<Tratamiento> Tratamiento { get; set; }
         public DbSet<Medicamento> Medicamento { get; set; }
         public DbSet<Paciente> Paciente { get; set; }
+        public DbSet<Examen> Examen { get; set; }
+        public DbSet<Expediente> Expediente { get; set; }
+        public DbSet<HistorialClinico> HistorialClinico { get; set; }
+        public DbSet<NotaMedica> NotaMedica { get; set; }
+        public DbSet<ResultadosExamenes> ResultadosExamenes { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
