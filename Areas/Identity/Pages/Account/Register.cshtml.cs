@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 using ProyectoProgramadoLenguajes2024.Models;
 using ProyectoProgramadoLenguajes2024.Utilities;
 
@@ -34,6 +35,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             RoleManager<IdentityRole> roleManager,
@@ -41,7 +43,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +52,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -178,6 +181,14 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, Input.role);
                     }
+
+                    Paciente paciente = new Paciente
+                    {
+                        Cedula = Input.Cedula,
+                        NombreCompleto = Input.Nombre,
+                        CorreoElectronico = Input.Email
+                    };
+                    _unitOfWork.Pacientes.Add(paciente);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
