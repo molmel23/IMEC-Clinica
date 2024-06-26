@@ -10,7 +10,9 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces
         IEspecialidadRepository Especialidades { get; }
         IMedicoTratanteRepository MedicoTratantes { get; }
         IEspecialidad_MedicoTratanteRepository Especialidades_MedicoTratantes { get; }
-
         IPadecimientoRepository Padecimiento { get; }
+        ITratamientoRepository Tratamiento { get; }
+        IMedicamentoRepository Medicamento { get; }
+
     }
 }

@@ -6,13 +6,13 @@ namespace ProyectoProgramadoLenguajes2024.Models
     {
 
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public string nombre { get; set; }
+        public string Nombre { get; set; }
 
         [Required]
-        public string descripcion { get; set; }
+        public string Descripcion { get; set; }
 
 
     }

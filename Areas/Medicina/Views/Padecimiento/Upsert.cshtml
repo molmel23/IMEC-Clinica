@@ -1,5 +1,6 @@
 ﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
 @model PadecimientoVM
+
 <partial name="_Notifications" />
 
 <form method="post">
@@ -16,9 +17,9 @@
         <div class="mb-3">
 
         <div class="mb-3">
-            <label asp-for="Padecimiento.Nombre" class="p-0"></label>
-            <input asp-for="Padecimiento.Nombre" type="text" class="form-control" />
-            <span asp-validation-for="Padecimiento.Nombre" class="text-danger"></span>
+                <label asp-for="Padecimiento.Nombre" class="p-0"></label>
+                <input asp-for="Padecimiento.Nombre" type="text" class="form-control" />
+                <span asp-validation-for="Padecimiento.Nombre" class="text-danger"></span>
         </div>
             <div class="mb-3">
                 <label asp-for="Padecimiento.Descripcion" class="p-0"></label>
@@ -28,7 +29,7 @@
 
 
         <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
-        <a asp-controller="Padecimiento" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
+            <a asp-controller="Padecimiento" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
     </div>
 
 

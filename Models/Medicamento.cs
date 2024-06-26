@@ -5,10 +5,10 @@ namespace ProyectoProgramadoLenguajes2024.Models
     public class Medicamento
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public string nombre { get; set; }
+        public string Nombre { get; set; }
 
 
 

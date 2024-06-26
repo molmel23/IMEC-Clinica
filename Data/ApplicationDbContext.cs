@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
 using Microsoft.EntityFrameworkCore;
 using ProyectoProgramadoLenguajes2024.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,9 +15,11 @@ namespace ProyectoProgramadoLenguajes2024.Data
         public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<MedicoTratante> MedicoTratantes { get; set; }
         public DbSet<Especialidad_MedicoTratante> Especialidades_MedicoTratantes { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
         public DbSet<Padecimiento> Padecimiento { get; set; }
+        public DbSet<Tratamiento> Tratamiento { get; set; }
+        public DbSet<Medicamento> Medicamento { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

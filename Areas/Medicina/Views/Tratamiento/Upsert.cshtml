@@ -1,0 +1,41 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model TratamientoVM
+<partial name="_Notifications" />
+
+<form method="post">
+
+    <input hidden asp-for="Tratamiento.Id" />
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary"> @(Model.Tratamiento.Id == 0 ? "Crear" : "Actualizar") Tratamiento</h2>
+        </div>
+    </div>
+
+    <div class="border p-3 mt-4">
+        <div class="mb-3">
+
+        <div class="mb-3">
+                <label asp-for="Tratamiento.Nombre" class="p-0"></label>
+                <input asp-for="Tratamiento.Nombre" type="text" class="form-control" />
+                <span asp-validation-for="Tratamiento.Nombre" class="text-danger"></span>
+        </div>
+            <div class="mb-3">
+                <label asp-for="Tratamiento.Descripcion" class="p-0"></label>
+                <input asp-for="Tratamiento.Descripcion" type="text" class="form-control" />
+                <span asp-validation-for="Tratamiento.Descripcion" class="text-danger"></span>
+            </div>
+
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
+            <a asp-controller="Tratamiento" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
+    </div>
+
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

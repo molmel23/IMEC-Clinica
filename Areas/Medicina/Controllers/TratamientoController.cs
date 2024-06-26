@@ -1,32 +1,30 @@
-﻿
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 using ProyectoProgramadoLenguajes2024.Models.ViewModels;
 using ProyectoProgramadoLenguajes2024.Models;
-using Microsoft.AspNetCore.Authorization;
 using ProyectoProgramadoLenguajes2024.Utilities;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
 {
     [Area("Medicina")]
     [Authorize(Roles = Roles.Medico)]
-    public class PadecimientoController : Controller
+    public class TratamientoController : Controller
     {
         #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
 
-        public PadecimientoController(IUnitOfWork unitOfWork)
+        public TratamientoController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-
-
 
         public IActionResult Index()
         {
             return View();
         }
+
         #endregion
 
 
@@ -35,10 +33,10 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
-            PadecimientoVM myPadecimiento = new()
+            TratamientoVM myTratamiento = new()
             {
-                Padecimiento = new Padecimiento(),
-                PadecimientoList = _unitOfWork.Padecimiento.GetAll().Select(i => new SelectListItem
+                Tratamiento = new Tratamiento(),
+                TratamientoList = _unitOfWork.Tratamiento.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.Nombre,
                     Value = i.Id.ToString()
@@ -47,73 +45,72 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
 
             if (id == null || id == 0)
             {
-                return View(myPadecimiento);
+                return View(myTratamiento);
             }
 
-            myPadecimiento.Padecimiento = _unitOfWork.Padecimiento.Get(x => x.Id == id);
-            if (myPadecimiento.Padecimiento == null)
+            myTratamiento.Tratamiento = _unitOfWork.Tratamiento.Get(x => x.Id == id);
+            if (myTratamiento.Tratamiento == null)
             {
                 return NotFound();
             }
 
-            return View(myPadecimiento);
+            return View(myTratamiento);
         }
+
         #endregion
 
         #region HTTP_POST
 
         [HttpPost]
-        public IActionResult Upsert(PadecimientoVM _padecimientoVM)
+        public IActionResult Upsert(TratamientoVM _tratamientoVM)
         {
             if (ModelState.IsValid)
             {
 
-                if (_padecimientoVM.Padecimiento.Id == 0)
-                    _unitOfWork.Padecimiento.Add(_padecimientoVM.Padecimiento);
+                if (_tratamientoVM.Tratamiento.Id == 0)
+                    _unitOfWork.Tratamiento.Add(_tratamientoVM.Tratamiento);
                 else
-                    _unitOfWork.Padecimiento.Update(_padecimientoVM.Padecimiento);
+                    _unitOfWork.Tratamiento.Update(_tratamientoVM.Tratamiento);
 
                 _unitOfWork.Save();
-                TempData["success"] = "Padecimiento agregado exitosamente";
+                TempData["success"] = "Tratamiento agregado exitosamente";
 
             }
 
             return RedirectToAction("Index");
 
         }
-
-
-
         #endregion
+
 
         #region API
         public IActionResult GetAll()
         {
-            var padecimientoList = _unitOfWork.Padecimiento.GetAll().Select(c => new {
+            var tratamientoList = _unitOfWork.Tratamiento.GetAll().Select(c => new {
                 c.Id,
                 c.Nombre,
                 c.Descripcion
 
             });
-            return Json(new { data = padecimientoList });
+            return Json(new { data = tratamientoList });
 
         }
 
 
         public IActionResult Delete(int? id)
         {
-            var padecimientoToDelete = _unitOfWork.Padecimiento.Get(x => x.Id == id);
+            var tratamientoToDelete = _unitOfWork.Tratamiento.Get(x => x.Id == id);
 
-            if (padecimientoToDelete == null)
+            if (tratamientoToDelete == null)
             {
-                return Json(new { success = false, message = "Error al borrar el padecimiento" });
+                return Json(new { success = false, message = "Error al borrar el tratamiento" });
             }
 
-            _unitOfWork.Padecimiento.Remove(padecimientoToDelete);
+            _unitOfWork.Tratamiento.Remove(tratamientoToDelete);
             _unitOfWork.Save();
-            return Json(new { success = true, message = "Padecimiento borrado exitosamente" });
+            return Json(new { success = true, message = "Tratamiento borrado exitosamente" });
         }
         #endregion
-
     }
 }
+
