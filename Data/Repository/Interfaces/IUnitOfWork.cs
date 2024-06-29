@@ -14,6 +14,10 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces
         ITratamientoRepository Tratamiento { get; }
         IMedicamentoRepository Medicamento { get; }
         IPacienteRepository Pacientes { get; }
+        ITratamientosPacientesRepository TratamientosPacientes { get; }
+        IPadecimientosPacientesRepository PadecimientosPacientes { get; }
+        IMedicamentosPacientesRepository MedicamentosPacientes { get; }
+
 
     }
 }

@@ -14,9 +14,13 @@ namespace ProyectoProgramadoLenguajes2024.Models
         [Required]
         public string ArchivoURL { get; set; }
 
-        public int numeroColegiadoMedico { get; set; }
+        public int NumeroColegiadoMedico { get; set; }
 
         [ForeignKey("NumeroColegiadoMedico")]
         public MedicoTratante MedicoTratante { get; set; }
+
+        public int CedulaPaciente { get; set; }
+        [ForeignKey("CedulaPaciente")]
+        public Paciente Paciente { get; set; }
     }
 }

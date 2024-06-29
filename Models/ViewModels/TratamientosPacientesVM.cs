@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
 {
-    public class ExpedienteVM
+    public class TratamientosPacientesVM
     {
         [ValidateNever]
-        public Expediente Expediente { get; set; }
+        public TratamientosPacientes TratamientosPacientes { get; set; }
 
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> ExpedienteList { get; set; }
+        public IEnumerable<SelectListItem> TratamientosPacientesList { get; set; }
     }
 }

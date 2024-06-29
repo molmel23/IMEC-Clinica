@@ -176,19 +176,32 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                     if (string.IsNullOrEmpty(Input.role))
                     {
                         await _userManager.AddToRoleAsync(user, Roles.Usuario);
+                        Paciente paciente = new Paciente
+                        {
+                            Cedula = user.Cedula,
+                            NombreCompleto = user.Nombre,
+                            CorreoElectronico = user.Email
+                        };
+                        _unitOfWork.Pacientes.Add(paciente);
+                        _unitOfWork.Save();
                     }
                     else
                     {
                         await _userManager.AddToRoleAsync(user, Input.role);
+
+                        if (Input.role == Roles.Usuario)
+                        {
+                            Paciente paciente = new Paciente
+                            {
+                                Cedula = user.Cedula,
+                                NombreCompleto = user.Nombre,
+                                CorreoElectronico = user.Email
+                            };
+                            _unitOfWork.Pacientes.Add(paciente);
+                            _unitOfWork.Save();
+                        }
                     }
 
-                    Paciente paciente = new Paciente
-                    {
-                        Cedula = Input.Cedula,
-                        NombreCompleto = Input.Nombre,
-                        CorreoElectronico = Input.Email
-                    };
-                    _unitOfWork.Pacientes.Add(paciente);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
