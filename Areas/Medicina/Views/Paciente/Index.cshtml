@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Lista de Pacientes";
+}
+
+<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Lista de Pacientes
+            </h2>
+        </div>
+    </div>
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre Completo</th>
+                <th>Correo Electronico</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/paciente.js"></script>

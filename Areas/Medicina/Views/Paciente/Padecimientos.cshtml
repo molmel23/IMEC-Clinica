@@ -1,0 +1,36 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model PadecimientosPacientesVM
+@{
+    ViewData["Title"] = "Expediente - Padecimientos";
+}
+
+<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Padecimientos
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-area="Medicina" asp-controller="Paciente" asp-action="AgregarPadecimiento" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Agregar Padecimiento
+            </a>
+        </div>
+    </div>
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Padecimiento</th>
+                <th>Descripcion</th>
+                <th>Diagnosticado Por</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/padecimientoPaciente.js"></script>

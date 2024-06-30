@@ -8,22 +8,18 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
         ajax: {
-            "url": "/Medicina/Paciente/getall",
+            "url": "/Medicina/Paciente/getpadecimientos",
             "type": "GET",
             "datatype": "json"
         },
         "columns": [
-            { "data": "cedula", "width": "15%" },
-            { "data": "nombreCompleto", "width": "35%" },
-            { "data": "correoElectronico", "width": "25%" },
+            { "data": "id", "width": "15%" },
+            { "data": "cedulaPaciente", "width": "35%" },
+            { "data": "numeroColegiadoMedico", "width": "25%" },
             {
-                "data": "cedula", "width": "35%",
+                "data": "id", "width": "35%",
                 "render": function (data) {
                     return `
-                            <a href="/Medicina/Paciente/Expediente/${data}" class="btn btn-primary mx-2">
-                                <i class="bi bi-pencil-square"></i> Expediente
-                            </a>
-
                             <a onClick=Delete(${data}) class="btn btn-danger mx-2">
                                 <i class="bi bi-trash"></i> Eliminar
                             </a>
@@ -49,7 +45,7 @@ function Delete(_id) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/Medicina/Paciente/delete/" + _id,
+                url: "/Medicina/Paciente/deletePaciente/" + _id,
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {

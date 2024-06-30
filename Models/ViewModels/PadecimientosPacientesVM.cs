@@ -6,10 +6,11 @@ namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
     public class PadecimientosPacientesVM
     {
         [ValidateNever]
-        public PadecimientosPacientesVM PadecimientosPacientes { get; set; }
+        public PadecimientosPacientes PadecimientoPaciente { get; set; }
 
 
         [ValidateNever]
         public IEnumerable<SelectListItem> PadecimientosPacientesList { get; set; }
+
     }
 }
