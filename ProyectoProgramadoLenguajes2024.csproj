@@ -36,6 +36,7 @@
     <Folder Include="Areas\Usuario\Models\" />
     <Folder Include="Areas\Usuario\Views\" />
     <Folder Include="Data\Migrations\" />
+    <Folder Include="wwwroot\archivos\examenes\" />
     <Folder Include="wwwroot\images\medicos\" />
   </ItemGroup>
 

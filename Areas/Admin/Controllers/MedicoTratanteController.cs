@@ -45,7 +45,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 MedicoTratanteVM = new MedicoTratanteVM
                 {
                     MedicoTratante = new Models.MedicoTratante(),
-                    MedicoTratenteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                    MedicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
                     {
                         Text = i.NombreCompleto,
                         Value = i.NumeroColegiado.ToString()
@@ -175,7 +175,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 MedicoTratanteVM = new MedicoTratanteVM
                 {
                     MedicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id),
-                    MedicoTratenteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                    MedicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
                     {
                         Text = i.NombreCompleto,
                         Value = i.NumeroColegiado.ToString()

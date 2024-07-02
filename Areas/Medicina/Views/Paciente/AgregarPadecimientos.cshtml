@@ -1,0 +1,42 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model ExpedienteVM
+
+@{
+    ViewData["Title"] = "Agregar Padecimiento";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="AgregarPadecimientos" method="post">
+  
+    <div class="form-floating mb-3">
+        <select asp-for="PadecimientosPacientesVM.PadecimientoPaciente.IdPadecimiento" asp-items="@Model.PadecimientoVM.PadecimientoList" class="form-select">
+            <option value="0">--- Selecccionar Padecimiento ---</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente" class="control-label">Cédula del Paciente</label>
+        <input asp-for="PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente" class="form-control" readonly/>
+        <span asp-validation-for="PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente" class="text-danger"></span>
+    </div>
+
+   
+
+    <div class="form-floating mb-3">
+        <select asp-for="PadecimientosPacientesVM.PadecimientoPaciente.NumeroColegiadoMedico" asp-items="@Model.MedicoTratanteVM.MedicoTratanteList" class="form-select">
+            <option value="0">--- Selecccionar Medico ---</option>
+        </select>
+    </div>
+
+    <div class="form-group d-flex justify-content-between">
+        <a asp-area="Medicina" asp-controller="Paciente" asp-action="Padecimientos" asp-route-id="@Model.PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente" class="btn btn-secondary">Volver</a>
+        <input type="submit" value="Agregar" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

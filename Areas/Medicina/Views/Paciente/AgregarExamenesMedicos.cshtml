@@ -1,0 +1,37 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model ExpedienteVM
+@{
+    ViewData["Title"] = "Agregar Examen Medico";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<form asp-action="ExamenesMedicos" enctype="multipart/form-data" method="post">
+    <div>
+        <label asp-for="ExamenVM.Examen.Descripcion"></label>
+        <input asp-for="ExamenVM.Examen.Descripcion" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ExamenVM.Examen.ArchivoURL" class="p-0">Foto o Archivo</label>
+        <input id="uploadBox" name="file" type="file" class="form-control" />
+        <span asp-validation-for="ExamenVM.Examen.ArchivoURL" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-floating mb-3">
+        <select asp-for="ExamenVM.Examen.NumeroColegiadoMedico" asp-items="@Model.MedicoTratanteVM.MedicoTratanteList" class="form-select">
+            <option value="0">--- Selecccionar Medico ---</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="ExamenVM.Examen.CedulaPaciente" class="control-label">Cédula del Paciente</label>
+        <input asp-for="ExamenVM.Examen.CedulaPaciente" class="form-control" readonly />
+        <span asp-validation-for="ExamenVM.Examen.CedulaPaciente" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
+    <a asp-area="Medicina" asp-controller="Paciente" asp-action="ExamenesMedicos" asp-route-id="@Model.ExamenVM.Examen.CedulaPaciente" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
+</form>

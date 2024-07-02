@@ -12,7 +12,7 @@ namespace ProyectoProgramadoLenguajes2024.Models
         public string Descripcion { get; set; }
 
         [Required]
-        public string ArchivoURL { get; set; }
+        public string? ArchivoURL { get; set; }
 
         public int NumeroColegiadoMedico { get; set; }
 

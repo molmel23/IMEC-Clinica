@@ -12,7 +12,7 @@ $(document).ready(function () {
 function loadDataTable(pacienteId) {
     dataTable = $('#tblData').DataTable({
         ajax: {
-            "url": "/Medicina/Paciente/GetPadecimientos/" + pacienteId,
+            "url": "/Medicina/Paciente/GetTratamientos/" + pacienteId,
             "type": "GET",
             "datatype": "json",
             "dataSrc": function (json) {
@@ -20,8 +20,8 @@ function loadDataTable(pacienteId) {
             }
         },
         "columns": [
-            { "data": "padecimiento.nombre", "width": "35%" },
-            { "data": "padecimiento.descripcion", "width": "35%" },
+            { "data": "tratamiento.nombre", "width": "35%" },
+            { "data": "tratamiento.descripcion", "width": "35%" },
             { "data": "medicoTratante.nombreCompleto", "width": "25%" },
             {
                 "data": "id", "width": "5%",
@@ -51,7 +51,7 @@ function Delete(_id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/Medicina/Paciente/SuspenderPadecimiento/" + _id,
+                url: "/Medicina/Paciente/SuspenderTratamiento/" + _id,
                 type: 'DELETE',
                 success: function (data) {
                     if (data.success) {

@@ -1,29 +1,35 @@
-﻿@{
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@{
     ViewData["Title"] = "Expediente";
 }
-@model Paciente
+@model ExpedienteVM
 <partial name="_Notifications" />
 
 <div class="container">
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary">
-                Expediente de @Model.NombreCompleto
+                Expediente de @Model.PacienteVM.Paciente.NombreCompleto
             </h2>
         </div>
     </div>
 
     <div class="row pt-4">
         <div class="col-12 text-end">
-            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Padecimientos" class="btn btn-primary mx-2">
+            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Padecimientos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
                 <i class="bi bi-plus-circle"></i> Padecimientos
             </a>
-            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Tratamientos" class="btn btn-primary mx-2">
+            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Tratamientos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
                 <i class="bi bi-plus-circle"></i> Tratamientos
             </a>
-            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Medicamentos" class="btn btn-primary mx-2">
+            <a asp-area="Medicina" asp-controller="Paciente" asp-action="Medicamentos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
                 <i class="bi bi-plus-circle"></i> Medicamentos
+            </a>
+            <a asp-area="Medicina" asp-controller="Paciente" asp-action="ExamenesMedicos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
+                <i class="bi bi-plus-circle"></i> Exámenes Médicos
             </a>
         </div>
     </div>
+
+    
 </div>
