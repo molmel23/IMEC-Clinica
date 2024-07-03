@@ -2,7 +2,7 @@
 @using ProyectoProgramadoLenguajes2024.Utilities
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registro";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-md-4">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
+            <h2>Crear nueva cuenta</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert" placeholder="Cedula" value=""></div>
             <div class="form-floating mb-3">
@@ -20,12 +20,12 @@
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Nombre" class="form-control" aria-required="true" placeholder="Nombre" />
-                <label asp-for="Input.Nombre">Nombre</label>
+                <label asp-for="Input.Nombre">Nombre completo</label>
                 <span asp-validation-for="Input.Nombre" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nombre@example.com" />
-                <label asp-for="Input.Email">Email</label>
+                <label asp-for="Input.Email">Correo electronico</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">

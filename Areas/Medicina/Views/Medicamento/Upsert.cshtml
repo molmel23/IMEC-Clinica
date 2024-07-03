@@ -6,14 +6,13 @@
 
     <input hidden asp-for="Medicamento.Id" />
 
-    <div class="border p-3 mt-4">
+    <div class="mb-3">
         <div class="row pb-2">
             <h2 class="text-primary"> @(Model.Medicamento.Id == 0 ? "Crear" : "Actualizar") Medicamento</h2>
         </div>
     </div>
 
-    <div class="border p-3 mt-4">
-        <div class="mb-3">
+      
 
         <div class="mb-3">
                 <label asp-for="Medicamento.Nombre" class="p-0"></label>
@@ -25,7 +24,7 @@
 
         <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
             <a asp-controller="Medicamento" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
-    </div>
+  
 
 
 </form>

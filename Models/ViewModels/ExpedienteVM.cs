@@ -4,13 +4,8 @@ namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
 {
     public class ExpedienteVM
     {
-
-       
         [ValidateNever]
         public PacienteVM PacienteVM { get; set; }
-
-
-
       
         [ValidateNever]
         public PadecimientoVM PadecimientoVM { get; set; }
@@ -23,7 +18,6 @@ namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
 
         [ValidateNever]
         public TratamientosPacientesVM TratamientosPacientesVM { get; set; }
-
         
         [ValidateNever]
         public MedicamentoVM MedicamentoVM { get; set; }
@@ -31,24 +25,14 @@ namespace ProyectoProgramadoLenguajes2024.Models.ViewModels
         [ValidateNever]
         public MedicamentosPacientesVM MedicamentosPacientesVM { get; set; }
        
-
         [ValidateNever]
         public ExamenVM ExamenVM { get; set; }
-
-
-
 
         [ValidateNever]
         public NotaMedicaVM NotaMedicaVM { get; set; }
 
-
-
-
-
         [ValidateNever]
         public MedicoTratanteVM MedicoTratanteVM { get; set; }
-
-
 
     }
 }

@@ -1,37 +1,45 @@
 ﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
 @model ExpedienteVM
-@{
-    ViewData["Title"] = "Agregar Examen Medico";
-}
 
-<h2>@ViewData["Title"]</h2>
+<div class="container">
+    <div class="card-body">
+        <div class="row pt-4">
+            <div class="col-6">
+                <h2 class="text-primary">
+                    Agregar Examen Médico
+                </h2>
+            </div>
+        <form asp-action="AgregarExamenesMedicos" enctype="multipart/form-data" method="post">
 
+            <div class="mb-3">
+                <label asp-for="ExamenVM.Examen.Descripcion" class="form-label">Descripción</label>
+                <input asp-for="ExamenVM.Examen.Descripcion" class="form-control" />
+            </div>
 
-<form asp-action="ExamenesMedicos" enctype="multipart/form-data" method="post">
-    <div>
-        <label asp-for="ExamenVM.Examen.Descripcion"></label>
-        <input asp-for="ExamenVM.Examen.Descripcion" />
+            <div class="mb-3">
+                <label asp-for="ExamenVM.Examen.ArchivoURL" class="form-label">PDF o Imagen</label>
+                <input id="uploadBox" name="file" type="file" class="form-control" />
+                <span asp-validation-for="ExamenVM.Examen.ArchivoURL" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExamenVM.Examen.NumeroColegiadoMedico" class="form-label">Médico Tratante</label>
+                <select asp-for="ExamenVM.Examen.NumeroColegiadoMedico" asp-items="@Model.MedicoTratanteVM.MedicoTratanteList" class="form-select">
+                    <option value="0">--- Seleccionar Médico ---</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExamenVM.Examen.CedulaPaciente" class="form-label">Cédula del Paciente</label>
+                <input asp-for="ExamenVM.Examen.CedulaPaciente" class="form-control" readonly />
+                <span asp-validation-for="ExamenVM.Examen.CedulaPaciente" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary me-3">Guardar</button>
+                <a asp-area="Medicina" asp-controller="Paciente" asp-action="ExamenesMedicos" asp-route-id="@Model.ExamenVM.Examen.CedulaPaciente" class="btn btn-secondary">Regresar a la lista</a>
+            </div>
+
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="ExamenVM.Examen.ArchivoURL" class="p-0">Foto o Archivo</label>
-        <input id="uploadBox" name="file" type="file" class="form-control" />
-        <span asp-validation-for="ExamenVM.Examen.ArchivoURL" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-floating mb-3">
-        <select asp-for="ExamenVM.Examen.NumeroColegiadoMedico" asp-items="@Model.MedicoTratanteVM.MedicoTratanteList" class="form-select">
-            <option value="0">--- Selecccionar Medico ---</option>
-        </select>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="ExamenVM.Examen.CedulaPaciente" class="control-label">Cédula del Paciente</label>
-        <input asp-for="ExamenVM.Examen.CedulaPaciente" class="form-control" readonly />
-        <span asp-validation-for="ExamenVM.Examen.CedulaPaciente" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
-    <a asp-area="Medicina" asp-controller="Paciente" asp-action="ExamenesMedicos" asp-route-id="@Model.ExamenVM.Examen.CedulaPaciente" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
-</form>
+</div>

@@ -23,12 +23,12 @@ function loadDataTable(pacienteId) {
             { "data": "descripcion", "width": "35%" },
             { "data": "medicoTratante.nombreCompleto", "width": "25%" },
             {
-                "data": "id", "width": "5%",
+                "data": "archivoURL",
                 "render": function (data) {
                     return `
-                         <a href="/Admin/Paciente/DetallesExamen/${data}" class="btn btn-success mx-2" target="_blank">
-                                    <i class="bi bi-eye"></i> Abrir
-                                </a> `;
+                        <a href="${data}" class="btn btn-success mx-2" target="_blank">
+                            <i class="bi bi-eye"></i> Abrir
+                        </a>`;
                 },
                 "orderable": false
             }

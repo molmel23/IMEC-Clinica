@@ -2,15 +2,15 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Ingreso";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
+<div class="container d-flex justify-content-center align-items-center" style="height: 70vh; ">
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h1 class="text-center text-primary">@ViewData["Title"]</h1>
+                <h2 class="text-center text-primary">Ingrese su correo y contraseña</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -33,13 +33,9 @@
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Iniciar Sesión</button>
                 </div>
                 <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">¿Olvidaste tu contraseña?</a>
-                    </p>
-                    <p>
+                    <p class="text-center">
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrar nuevo usuario</a>
                     </p>
-                   
                 </div>
             </form>
         </section>

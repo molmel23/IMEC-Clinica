@@ -1,12 +1,13 @@
 ﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
 @model ExpedienteVM
 
-@{
-    ViewData["Title"] = "Agregar Tratamiento";
-}
-
-<h2>@ViewData["Title"]</h2>
-
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Agregar Tratamiento
+            </h2>
+        </div>
 <form asp-action="AgregarTratamientos" method="post">
 
     <div class="form-floating mb-3">
@@ -34,7 +35,8 @@
         <input type="submit" value="Agregar" class="btn btn-primary" />
     </div>
 </form>
-
+    </div>
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -13,6 +13,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
     [Authorize(Roles = Roles.Medico)]
     public class PacienteController : Controller
     {
+        #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
         private IWebHostEnvironment _webHostEnvironment;
 
@@ -26,6 +27,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         {
             return View();
         }
+       
 
         public IActionResult GetAll()
         {
@@ -37,7 +39,9 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             });
             return Json(new { data = pacientesList });
         }
+        #endregion
 
+        #region HTTP_GET_Expediente
         [HttpGet]
         public IActionResult Expediente(int id)
         {
@@ -50,50 +54,15 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             };
             return View(model);
         }
+        #endregion
 
+        #region Padecimientos
         [HttpGet]
         public IActionResult GetPadecimientos(int id)
         {
             var padecimientos = _unitOfWork.PadecimientosPacientes.GetAll(includeProperties: "Padecimiento,MedicoTratante")
                                    .Where(x => x.CedulaPaciente == id);
             return Json(new { data = padecimientos });
-        }
-
-        [HttpGet]
-        public IActionResult GetMedicamentos(int id)
-        {
-            var medicamentos = _unitOfWork.MedicamentosPacientes.GetAll(includeProperties: "Medicamento,MedicoTratante")
-                                   .Where(x => x.CedulaPaciente == id);
-            return Json(new { data = medicamentos });
-        }
-
-        [HttpGet]
-        public IActionResult GetTratamientos(int id)
-        {
-            var tratamientos = _unitOfWork.TratamientosPacientes.GetAll(includeProperties: "Tratamiento,MedicoTratante")
-                                   .Where(x => x.CedulaPaciente == id);
-            return Json(new { data = tratamientos });
-        }
-
-        [HttpGet]
-        public IActionResult Padecimientos(int id)
-        {
-            ViewData["PacienteId"] = id;
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Medicamentos(int id)
-        {
-            ViewData["PacienteId"] = id;
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Tratamientos(int id)
-        {
-            ViewData["PacienteId"] = id;
-            return View();
         }
 
         [HttpGet]
@@ -128,6 +97,51 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarPadecimientos(ExpedienteVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.PadecimientosPacientes.Add(model.PadecimientosPacientesVM.PadecimientoPaciente);
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Padecimientos), new { id = model.PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente });
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Padecimientos(int id)
+        {
+            ViewData["PacienteId"] = id;
+            return View();
+        }
+
+        public IActionResult SuspenderPadecimiento(int? id)
+        {
+            var padecimientoToDelete = _unitOfWork.PadecimientosPacientes.Get(x => x.Id == id);
+
+            if (padecimientoToDelete == null)
+            {
+                return Json(new { success = false, message = "Error al suspender" });
+            }
+
+            _unitOfWork.PadecimientosPacientes.Remove(padecimientoToDelete);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Suspendido exitosamente" });
+        }
+        #endregion
+
+        #region Medicamentos
+        [HttpGet]
+        public IActionResult GetMedicamentos(int id)
+        {
+            var medicamentos = _unitOfWork.MedicamentosPacientes.GetAll(includeProperties: "Medicamento,MedicoTratante")
+                                   .Where(x => x.CedulaPaciente == id);
+            return Json(new { data = medicamentos });
+        }
+
         [HttpGet]
         public IActionResult AgregarMedicamentos(int id)
         {
@@ -160,6 +174,59 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarMedicamentos(ExpedienteVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.MedicamentosPacientes.Add(model.MedicamentosPacientesVM.MedicamentosPacientes);
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Medicamentos), new { id = model.MedicamentosPacientesVM.MedicamentosPacientes.CedulaPaciente });
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Medicamentos(int id)
+        {
+            ViewData["PacienteId"] = id;
+            return View();
+        }
+
+
+        public IActionResult SuspenderMedicamento(int? id)
+        {
+            var medicamentoToDelete = _unitOfWork.MedicamentosPacientes.Get(x => x.Id == id);
+
+            if (medicamentoToDelete == null)
+            {
+                return Json(new { success = false, message = "Error al suspender" });
+            }
+
+            _unitOfWork.MedicamentosPacientes.Remove(medicamentoToDelete);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Suspendido exitosamente" });
+        }
+
+        #endregion
+
+        #region Tratamientos
+        [HttpGet]
+        public IActionResult GetTratamientos(int id)
+        {
+            var tratamientos = _unitOfWork.TratamientosPacientes.GetAll(includeProperties: "Tratamiento,MedicoTratante")
+                                   .Where(x => x.CedulaPaciente == id);
+            return Json(new { data = tratamientos });
+        }
+
+        [HttpGet]
+        public IActionResult Tratamientos(int id)
+        {
+            ViewData["PacienteId"] = id;
+            return View();
+        }
 
         [HttpGet]
         public IActionResult AgregarTratamientos(int id)
@@ -195,34 +262,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AgregarPadecimientos(ExpedienteVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.PadecimientosPacientes.Add(model.PadecimientosPacientesVM.PadecimientoPaciente);
-                _unitOfWork.Save();
-                return RedirectToAction(nameof(Padecimientos), new { id = model.PadecimientosPacientesVM.PadecimientoPaciente.CedulaPaciente });
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AgregarMedicamentos(ExpedienteVM model)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.MedicamentosPacientes.Add(model.MedicamentosPacientesVM.MedicamentosPacientes);
-                _unitOfWork.Save();
-                return RedirectToAction(nameof(Medicamentos), new { id = model.MedicamentosPacientesVM.MedicamentosPacientes.CedulaPaciente });
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult AgregarTratamientos(ExpedienteVM model)
         {
             if (ModelState.IsValid)
@@ -233,34 +272,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             }
 
             return View(model);
-        }
-
-        public IActionResult SuspenderMedicamento(int? id)
-        {
-            var medicamentoToDelete = _unitOfWork.MedicamentosPacientes.Get(x => x.Id == id);
-
-            if (medicamentoToDelete == null)
-            {
-                return Json(new { success = false, message = "Error al suspender" });
-            }
-
-            _unitOfWork.MedicamentosPacientes.Remove(medicamentoToDelete);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = "Suspendido exitosamente" });
-        }
-
-        public IActionResult SuspenderPadecimiento(int? id)
-        {
-            var padecimientoToDelete = _unitOfWork.PadecimientosPacientes.Get(x => x.Id == id);
-
-            if (padecimientoToDelete == null)
-            {
-                return Json(new { success = false, message = "Error al suspender" });
-            }
-
-            _unitOfWork.PadecimientosPacientes.Remove(padecimientoToDelete);
-            _unitOfWork.Save();
-            return Json(new { success = true, message = "Suspendido exitosamente" });
         }
 
         public IActionResult SuspenderTratamiento(int? id)
@@ -290,7 +301,9 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             _unitOfWork.Save();
             return Json(new { success = true, message = "Paciente borrado exitosamente" });
         }
+        #endregion
 
+        #region ExamenesMedicos
         [HttpGet]
         public IActionResult ExamenesMedicos(int id)
         {
@@ -301,10 +314,18 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         [HttpGet]
         public IActionResult GetExamenes(int id)
         {
-            var examenes = _unitOfWork.ExamenesPacientes.GetAll(includeProperties: "MedicoTratante")
-                                   .Where(x => x.CedulaPaciente == id);
+            var examenes = _unitOfWork.ExamenesPacientes
+                              .GetAll(includeProperties: "MedicoTratante")
+                              .Where(x => x.CedulaPaciente == id)
+                              .Select(e => new {
+                                  e.Id,
+                                  e.Descripcion,
+                                  ArchivoURL = Url.Content("~/" + e.ArchivoURL),
+                                  MedicoTratante = e.MedicoTratante
+                              });
             return Json(new { data = examenes });
         }
+
 
         [HttpGet]
         public IActionResult AgregarExamenesMedicos(int? id)
@@ -328,6 +349,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AgregarExamenesMedicos(ExpedienteVM model, IFormFile? file)
         {
             string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -347,7 +369,8 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
 
             _unitOfWork.ExamenesPacientes.Add(model.ExamenVM.Examen);
             _unitOfWork.Save();
-            return RedirectToAction("ExamenesMedicos");
+            return RedirectToAction("ExamenesMedicos", new { id = model.ExamenVM.Examen.CedulaPaciente });
         }
+        #endregion
     }
 }

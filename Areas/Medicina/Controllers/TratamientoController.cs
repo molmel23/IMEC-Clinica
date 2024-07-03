@@ -82,7 +82,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         }
         #endregion
 
-
         #region API
         public IActionResult GetAll()
         {
