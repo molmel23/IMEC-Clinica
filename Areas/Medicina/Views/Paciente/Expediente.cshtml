@@ -1,5 +1,10 @@
 ﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
 
+@{
+    ViewData["Title"] = "Expediente";
+    var pacienteId = ViewData["PacienteId"];
+}
+
 @model ExpedienteVM
 <partial name="_Notifications" />
 
@@ -29,6 +34,22 @@
             <a asp-area="Medicina" asp-controller="Paciente" asp-action="AgregarNotasMedicas" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
                 <i class="bi bi-plus-circle"></i> Agregar Nota Medica
             </a>
-        </div>
-    </div> 
+        </div>   
+    </div>
+
+    <input type="hidden" id="pacienteId" value="@pacienteId" />
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nota</th>
+                <th>Fecha</th>
+                <th>Médico</th>
+            </tr>
+        </thead>
+
+    </table>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/notaMedica.js"></script>

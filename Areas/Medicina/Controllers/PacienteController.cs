@@ -45,6 +45,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         [HttpGet]
         public IActionResult Expediente(int id)
         {
+            ViewData["PacienteId"] = id;
             ExpedienteVM model = new ExpedienteVM
             {
                 PacienteVM = new PacienteVM
@@ -379,15 +380,38 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         public IActionResult GetNotasMedicas(int id)
         {
             var notasMedicas = _unitOfWork.NotasMedicas.GetAll(includeProperties: "MedicoTratante")
-                              .Where(x => x.CedulaPaciente == id)
-                              .Select(e => new
-                              {
-                                  e.Id,
-                                  e.Texto,
-                                  e.Fecha,
-                                  MedicoTratante = e.MedicoTratante
-                              });
+                              .Where(x => x.CedulaPaciente == id).ToList();
             return Json(new { data = notasMedicas });
+        }
+
+        [HttpGet]
+        public IActionResult AgregarNotasMedicas(int? id)
+        {
+            ExpedienteVM model = new ExpedienteVM
+            {
+                NotaMedicaVM = new NotaMedicaVM
+                {
+                    NotaMedica = new NotaMedica { CedulaPaciente = id.Value}
+                },
+                MedicoTratanteVM = new MedicoTratanteVM
+                {
+                    MedicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(i => new SelectListItem
+                    {
+                        Text = i.NombreCompleto,
+                        Value = i.NumeroColegiado.ToString()
+                    }).ToList()
+                }
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AgregarNotasMedicas(ExpedienteVM model)
+        {
+            _unitOfWork.NotasMedicas.Add(model.NotaMedicaVM.NotaMedica);
+            _unitOfWork.Save();
+            return RedirectToAction("Expediente", new { id = model.NotaMedicaVM.NotaMedica.CedulaPaciente });
         }
         #endregion
     }

@@ -38,18 +38,28 @@
                 <label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-             @* @if (User.IsInRole(Roles.Admin)) *@
-            @* { *@
+            @if (User.IsInRole(Roles.Admin))
+            {
                 <div class="form-floating mb-3">
                     <select asp-for="Input.role" asp-items="@Model.Input.roleList" class="form-select">
                         <option disabled selected> --- Selecccionar Rol --- </option>
                     </select>
                 </div>
-            @* } *@
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.NumeroColegiado" class="form-control" aria-required="true" />
+                    <label asp-for="Input.NumeroColegiado">Numero de Colegiado (En caso de Médico)</label>
+                    <span asp-validation-for="Input.NumeroColegiado" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Foto" class="p-0">Foto (En caso de Médico)</label>
+                    <input id="uploadBox" name="file" type="file" class="form-control" />
+                    <span asp-validation-for="Input.Foto" class="text-danger"></span>
+                </div>
+            }
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrarse</button>
         </form>
     </div>
-    
+
 </div>
 
 @section Scripts {

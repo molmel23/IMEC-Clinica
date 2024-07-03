@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using NuGet.Packaging.Signing;
 using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 using ProyectoProgramadoLenguajes2024.Models;
+using ProyectoProgramadoLenguajes2024.Models.ViewModels;
 using ProyectoProgramadoLenguajes2024.Utilities;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
@@ -36,6 +39,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RegisterModel(
             RoleManager<IdentityRole> roleManager,
@@ -43,7 +47,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, IUnitOfWork unitOfWork)
+            IEmailSender emailSender, IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -53,6 +57,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -114,6 +119,8 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             public IEnumerable<SelectListItem> roleList { get; set; }
             public string? Nombre { get; set; }
             public int Cedula { get; set; }
+            public int NumeroColegiado { get; set; }
+            public IFormFile? Foto { get; set; }
         }
 
         private void CreateRoles()
@@ -198,6 +205,35 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                                 CorreoElectronico = user.Email
                             };
                             _unitOfWork.Pacientes.Add(paciente);
+                            _unitOfWork.Save();
+                        } else if (Input.role == Roles.Medico)
+                        {
+                            MedicoTratante medico = new MedicoTratante
+                            {
+                                NumeroColegiado = Input.NumeroColegiado,
+                                NombreCompleto = user.Nombre,
+
+                            };
+
+                            string wwwRootPath = _webHostEnvironment.WebRootPath;
+                            if (Input.Foto != null)
+                            {
+                                string fileName = Guid.NewGuid().ToString();
+                                string extension = Path.GetExtension(Input.Foto.FileName);
+                                var uploads = Path.Combine(wwwRootPath, @"images\medicos");
+
+                                using (var fileStream = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                                {
+                                    Input.Foto.CopyTo(fileStream);
+                                }
+
+                                medico.FotoURL = @"images\medicos\" + fileName + extension;
+                            }
+                            else
+                            {
+                                medico.FotoURL = @"images\medicos\default.jpg";
+                            }
+                            _unitOfWork.MedicoTratantes.Add(medico);
                             _unitOfWork.Save();
                         }
                     }

@@ -22,18 +22,7 @@ function loadDataTable(pacienteId) {
         "columns": [
             { "data": "texto", "width": "35%" },  
             { "data": "fecha", "width": "35%" }, 
-            { "data": "medicoTratante.nombreCompleto", "width": "25%" },
-            {
-                "data": "id", "width": "5%",
-                "render": function (data) {
-                    return `
-                        <a onClick=Delete(${data}) class="btn btn-danger mx-2">
-                            <i class="bi bi-trash"></i> Suspender
-                        </a>
-                    `;
-                },
-                "orderable": false
-            }
+            { "data": "medicoTratante.nombreCompleto", "width": "25%" }
         ],
         "order": [[1, 'asc']]
     });

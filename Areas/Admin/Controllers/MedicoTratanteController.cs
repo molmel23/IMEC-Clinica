@@ -113,6 +113,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                     {
                         especialidad_MedicoTratanteVM.MedicoTratanteVM.MedicoTratante.FotoURL = existingMedico.FotoURL;
                     }
+
                 }
             }
 
