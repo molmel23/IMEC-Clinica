@@ -1,0 +1,36 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model ExpedienteVM
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Agregar Nota Medica
+            </h2>
+        </div>
+        <form asp-action="AgregarNotasMedicas" method="post">
+
+            <div class="mb-3">
+                <label asp-for="NotaMedicaVM.NotaMedicaVM.NotaMedica.Texto" class="p-0"></label>
+                <textarea asp-for="NotaMedicaVM.NotaMedicaVM.NotaMedica.Texto" rows="3" type="text" class="form-control"> </textarea>
+                <span asp-validation-for="NotaMedicaVM.NotaMedicaVM.NotaMedica.Texto" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select asp-for="NotaMedicaVM.NotaMedicaVM.NotaMedica.NumeroColegiadoMedico" asp-items="@Model.MedicoTratanteVM.MedicoTratanteList" class="form-select">
+                    <option value="0">--- Selecccionar Medico ---</option>
+                </select>
+            </div>
+
+            <div class="form-group d-flex justify-content-between">
+                <a asp-area="Medicina" asp-controller="Paciente" asp-action="Medicamentos" asp-route-id="@Model.MedicamentosPacientesVM.MedicamentosPacientes.CedulaPaciente" class="btn btn-secondary">Volver</a>
+                <input type="submit" value="Agregar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

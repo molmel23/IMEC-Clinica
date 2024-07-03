@@ -372,5 +372,23 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
             return RedirectToAction("ExamenesMedicos", new { id = model.ExamenVM.Examen.CedulaPaciente });
         }
         #endregion
+
+        #region NotasMedicas
+        [HttpGet]
+
+        public IActionResult GetNotasMedicas(int id)
+        {
+            var notasMedicas = _unitOfWork.NotasMedicas.GetAll(includeProperties: "MedicoTratante")
+                              .Where(x => x.CedulaPaciente == id)
+                              .Select(e => new
+                              {
+                                  e.Id,
+                                  e.Texto,
+                                  e.Fecha,
+                                  MedicoTratante = e.MedicoTratante
+                              });
+            return Json(new { data = notasMedicas });
+        }
+        #endregion
     }
 }
