@@ -42,7 +42,21 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 Identificacion = c.Cedula
             }).ToList();
 
-            return Json(new { data = pacientes});
+            var medicos = _unitOfWork.MedicoTratantes.GetAll().Select(c => new
+            {
+                NombreCompleto = "|Medico| " + c.NombreCompleto,
+                Identificacion = c.NumeroColegiado
+            }).ToList();
+
+            var administradores = _unitOfWork.Administradores.GetAll().Select(c => new
+            {
+                NombreCompleto = "|Administrador| " + c.NombreCompleto,
+                Identificacion = c.Cedula
+            }).ToList();
+
+            var todos = pacientes.Concat(medicos).Concat(administradores);
+
+            return Json(new { data = todos});
         }
 
         public IActionResult Upsert(int? id)
@@ -280,26 +294,51 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
         #endregion
 
+        
         [HttpPost]
-        public async Task<IActionResult> BlockUser(string userId)
+        public async Task<IActionResult> BlockUser(int id)
         {
-            if (string.IsNullOrEmpty(userId))
+            var paciente = _unitOfWork.Pacientes.Get(x => x.Cedula == id);
+            var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id);
+            var administrador = _unitOfWork.Administradores.Get(x => x.Cedula == id);
+            var user = new IdentityUser();
+
+            if (paciente != null)
             {
-                return BadRequest("User ID is null or empty.");
+                user = await _userManager.FindByEmailAsync(paciente.CorreoElectronico);
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            if (medicoTratante != null)
+            {
+                user = await _userManager.FindByNameAsync(medicoTratante.NombreCompleto);
+            }
+
+            if (administrador != null)
+            {
+                user = await _userManager.FindByEmailAsync(administrador.CorreoElectronico);
+            }
+
             if (user == null)
             {
-                return NotFound($"User with ID {userId} not found.");
+                return NotFound($"User with ID {id} not found.");
             }
 
-            user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100); // Bloquea al usuario por 100 años
+            if (user.LockoutEnd != null && user.LockoutEnd > DateTimeOffset.UtcNow)
+            {
+                await _userManager.SetLockoutEndDateAsync(user, null);
+                return View("Index");
+            }
+
+            var lockoutEnd = DateTimeOffset.UtcNow.AddYears(1000);
+
+            user.LockoutEnd = lockoutEnd;
+
+
             var result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "ListaUsuarios");
+                return View("Index");
             }
 
             foreach (var error in result.Errors)
@@ -307,7 +346,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            return RedirectToAction("Index", "ListaUsuarios");
+            return View("Index");
         }
 
     }

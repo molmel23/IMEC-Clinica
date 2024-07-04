@@ -120,7 +120,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                     // Comprobar el rol del usuario
                     if (User.IsInRole(Roles.Medico))
                     {
-                        returnUrl = Url.Content("~/Medicina/Bienvenida/Index");
+                        returnUrl = Url.Content("~/Medicina/Paciente");
                     }
                     else if (User.IsInRole(Roles.Admin))
                     {

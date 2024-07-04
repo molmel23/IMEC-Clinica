@@ -120,6 +120,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
             }
             if (result.IsLockedOut)
             {
+
                 return RedirectToPage("./Lockout");
             }
             else

@@ -22,13 +22,10 @@ function loadDataTable() {
                 "render": function (data) {
                     return `
 
-                    <a href="/Admin/ListaUsuarios/Upsert/${data}" class="btn btn-primary mx-2">
-                                <i class="bi bi-pencil-square"></i> Editar
+                    
+                    <a onClick=BlockUser(${data}) class="btn btn-danger mx-2">
+                                <i class="bi bi-lock"></i> Bloquear
                             </a>
-
-                    <a onClick=Delete(${data}) class="btn btn-danger mx-2">
-                        <i class="bi bi-trash"></i> Delete
-                    </a>
                   `
                 }, "width": "35%"
             }
@@ -37,7 +34,7 @@ function loadDataTable() {
     });
 }
 
-function Delete(_id) {
+function BlockUser(_id) {
     Swal.fire({
         title: "Esta seguro?",
         text: "No se puede revertir",
@@ -45,13 +42,13 @@ function Delete(_id) {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Si, borrar!"
+        confirmButtonText: "Si, bloquear!"
     }).then((result) => {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "/Admin/ListaUsuarios/Delete/" + _id,
-                type: 'DELETE',
+                url: "/Admin/ListaUsuarios/BlockUser/" + _id,
+                type: 'POST',
                 success: function (data) {
                     if (data.success) {
                         dataTable.ajax.reload();
@@ -68,3 +65,4 @@ function Delete(_id) {
         }
     });
 }
+

@@ -29,6 +29,8 @@ function loadDataTable() {
                             <a onClick=Delete(${data}) class="btn btn-danger mx-2">
                                 <i class="bi bi-trash"></i> Eliminar
                             </a>
+
+                            
                           `
                 },
                 "orderable": false
@@ -37,6 +39,9 @@ function loadDataTable() {
         "order": [[1, 'asc']]
     });
 }
+
+
+
 
 function Delete(_id) {
     Swal.fire({

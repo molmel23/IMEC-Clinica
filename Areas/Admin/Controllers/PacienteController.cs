@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
@@ -18,10 +19,14 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
 
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PacienteController(IUnitOfWork unitOfWork)
+
+
+        public PacienteController(IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
 
         }
 
@@ -93,6 +98,12 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         }
 
 
+
+
+        
+
+
+
         public IActionResult Delete(int? id)
         {
             var pacienteToDelete = _unitOfWork.Pacientes.Get(x => x.Cedula == id);
@@ -141,6 +152,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
             return Json(new { success = false, message = "Error al borrar el paciente" });
 
         }
-    }   
+    }
 }
 
