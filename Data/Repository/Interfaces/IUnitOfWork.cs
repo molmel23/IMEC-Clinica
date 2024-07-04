@@ -21,5 +21,7 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces
         INotaMedicaRepository NotasMedicas { get; }
 
 
+        IAdministradoresRepository Administradores { get; }
+
     }
 }

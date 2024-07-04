@@ -156,6 +156,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
         #endregion
 
+
         #region API
         public IActionResult GetAll()
         {
@@ -212,33 +213,58 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
             return View(myMedico);
         }
-
+        #endregion
 
         public IActionResult Delete(int? id)
         {
-
-            var medicoTratanteToDelete = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id);
-
-            if (medicoTratanteToDelete == null)
+            try
             {
-                return Json(new { success = false, message = "Error al borrar Médico Tratante" });
+                var medicoTratante = _unitOfWork.MedicoTratantes.Get(x => x.NumeroColegiado == id);
+                
+                if (medicoTratante != null)
+                {
+                    var padecimientosPaciente = _unitOfWork.PadecimientosPacientes.GetAll().Where(x => x.CedulaPaciente == id).ToList();
+                    var tratamientosPaciente = _unitOfWork.TratamientosPacientes.GetAll().Where(x => x.CedulaPaciente == id).ToList();
+                    var medicamentosPaciente = _unitOfWork.MedicamentosPacientes.GetAll().Where(x => x.CedulaPaciente == id).ToList();
+                    var examenesPaciente = _unitOfWork.ExamenesPacientes.GetAll().Where(x => x.CedulaPaciente == id).ToList();
+                    var notasMedicas = _unitOfWork.NotasMedicas.GetAll().Where(x => x.CedulaPaciente == id).ToList();
+
+                    foreach (var padecimientoPaciente in padecimientosPaciente)
+                    {
+                        _unitOfWork.PadecimientosPacientes.Remove(padecimientoPaciente);
+                    }
+
+                    foreach (var tratamientoPaciente in tratamientosPaciente)
+                    {
+                        _unitOfWork.TratamientosPacientes.Remove(tratamientoPaciente);
+                    }
+
+                    foreach (var medicamentoPaciente in medicamentosPaciente)
+                    {
+                        _unitOfWork.MedicamentosPacientes.Remove(medicamentoPaciente);
+                    }
+
+                    foreach (var examenPaciente in examenesPaciente)
+                    {
+                        _unitOfWork.ExamenesPacientes.Remove(examenPaciente);
+                    }
+
+                    foreach (var notaMedica in notasMedicas)
+                    {
+                        _unitOfWork.NotasMedicas.Remove(notaMedica);
+                    }
+
+                    _unitOfWork.MedicoTratantes.Remove(medicoTratante);
+                    _unitOfWork.Save();
+                      
+                }
+                return Json(new { success = true, message = "Medico eliminado exitosamente" });
             }
-
-            var especialidadesMedico = _unitOfWork.Especialidades_MedicoTratantes.GetAll()
-                .Where(x => x.MedicoTratanteId == id).ToList();
-
-            foreach (var especialidadMedico in especialidadesMedico)
+            catch
             {
-                _unitOfWork.Especialidades_MedicoTratantes.Remove(especialidadMedico);
+                return Json(new { success = false, message = "No se pudo eliminar el medico" });
             }
-
-            _unitOfWork.MedicoTratantes.Remove(medicoTratanteToDelete);
-            _unitOfWork.Save();
-
-            return Json(new { success = true, message = "Médico Tratante borrado exitosamente" });
         }
 
-        #endregion
-
     }
-}
+}   

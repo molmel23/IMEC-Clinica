@@ -23,6 +23,7 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
             TratamientosPacientes = new TratamientosPacientesRepository(_db);
             PadecimientosPacientes = new PadecimientosPacientesRepository(_db);
             MedicamentosPacientes = new MedicamentosPacientesRepository(_db);
+            Administradores = new AdministradorRepository(_db);
 
         }
 
@@ -38,6 +39,8 @@ namespace ProyectoProgramadoLenguajes2024.Data.Repository
         public ITratamientosPacientesRepository TratamientosPacientes { get; }
         public IPadecimientosPacientesRepository PadecimientosPacientes { get; }
         public IMedicamentosPacientesRepository MedicamentosPacientes { get; }
+
+        public IAdministradoresRepository Administradores { get; }
 
 
         public void Save()

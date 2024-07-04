@@ -206,7 +206,21 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                             };
                             _unitOfWork.Pacientes.Add(paciente);
                             _unitOfWork.Save();
-                        } else if (Input.role == Roles.Medico)
+                        } 
+                        else if(Input.role == Roles.Admin)
+                        {
+                            Administrador administrador = new Administrador
+                            {
+                                Cedula = user.Cedula,
+                                NombreCompleto = user.Nombre,
+                                CorreoElectronico = user.Email
+                            };
+                            _unitOfWork.Administradores.Add(administrador);
+                            _unitOfWork.Save();
+                        }
+                        
+                        
+                        else if (Input.role == Roles.Medico)
                         {
                             MedicoTratante medico = new MedicoTratante
                             {

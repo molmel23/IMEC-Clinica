@@ -1,0 +1,42 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+@model AdministradorVM
+<partial name="_Notifications" />
+
+<form method="post">
+
+    <input hidden asp-for="Administrador.Cedula" />
+
+    <div class="mb-3">
+        <div class="row pb-2">
+            <h2 class="text-primary"> @(Model.Administrador.Cedula == 0 ? "Crear" : "Actualizar") Administrador</h2>
+        </div>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label asp-for="Administrador.NombreCompleto" class="p-0"></label>
+        <input asp-for="Administrador.NombreCompleto" type="text" class="form-control" />
+        <span asp-validation-for="Administrador.NombreCompleto" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Administrador.CorreoElectronico" class="p-0"></label>
+        <input asp-for="Administrador.CorreoElectronico" type="text" class="form-control" />
+        <span asp-validation-for="Administrador.CorreoElectronico" class="text-danger"></span>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary" style="width:150px">Guardar</button>
+    <a asp-controller="Administrador" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
+
+
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
