@@ -3,21 +3,17 @@
 <partial name="_Notifications" />
 
 <form method="post" enctype="multipart/form-data">
-
-  
-   
         <div class="mb-3">
             <h2 class="text-primary"> @(Model.MedicoTratanteVM.MedicoTratante.NumeroColegiado == 0 ? "Agregar" : "Modificar") Médico Tratante</h2>
-        </div>
-    
-
-    
+        </div>   
         <div class="mb-3">
             <div class="mb-3">
                 <label asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" class="p-0">Número de Colegiado</label>
                 @if (Model.MedicoTratanteVM.MedicoTratante.NumeroColegiado != 0)
                 {
                     <input asp-for="MedicoTratanteVM.MedicoTratante.NumeroColegiado" type="number" class="form-control" readonly />
+                <label asp-for="MedicoTratanteVM.MedicoTratante.Cedula" class="p-0">Cedula</label>
+                <input asp-for="MedicoTratanteVM.MedicoTratante.Cedula" type="number" class="form-control" readonly />
                 }
                 else
                 {
@@ -47,8 +43,6 @@
             <a asp-controller="MedicoTratante" asp-action="Index" style="width:200px" class="btn btn-secondary">Regresar a la lista</a>
         </div>
    
-
-
 </form>
 
 @section Scripts {

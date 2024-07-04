@@ -12,6 +12,7 @@ namespace ProyectoProgramadoLenguajes2024.Models
         public string Texto { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; }
 
         public int NumeroColegiadoMedico { get; set; }

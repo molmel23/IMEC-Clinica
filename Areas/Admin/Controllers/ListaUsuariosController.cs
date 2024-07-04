@@ -7,6 +7,7 @@ using ProyectoProgramadoLenguajes2024.Models;
 using ProyectoProgramadoLenguajes2024.Utilities;
 using Microsoft.DotNet.MSIdentity.Shared;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 {
@@ -17,14 +18,14 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         #region Properties_Constructor
         private IUnitOfWork _unitOfWork;
         private IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ListaUsuariosController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public ListaUsuariosController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
-
-
 
         public IActionResult Index()
         {
@@ -32,6 +33,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         }
         #endregion
 
+        #region GETs
         public IActionResult GetAll()
         {
             var pacientes = _unitOfWork.Pacientes.GetAll().Select(c => new
@@ -39,10 +41,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 NombreCompleto = "|Paciente| "+c.NombreCompleto,
                 Identificacion = c.Cedula
             }).ToList();
-
-
-            
-           
 
             return Json(new { data = pacientes});
         }
@@ -84,9 +82,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
             }
         }
 
-
-
-
+        #endregion
 
         #region HTTP_GET
 
@@ -283,6 +279,36 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
 
 
         #endregion
+
+        [HttpPost]
+        public async Task<IActionResult> BlockUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID is null or empty.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"User with ID {userId} not found.");
+            }
+
+            user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100); // Bloquea al usuario por 100 años
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "ListaUsuarios");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return RedirectToAction("Index", "ListaUsuarios");
+        }
 
     }
 }

@@ -5,6 +5,9 @@ namespace ProyectoProgramadoLenguajes2024.Models
 {
     public class MedicoTratante
     {
+        [Required]
+        public int Cedula { get; set; }
+
         [Key]
         public int NumeroColegiado { get; set; }
 

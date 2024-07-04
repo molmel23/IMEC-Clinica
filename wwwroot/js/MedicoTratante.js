@@ -13,6 +13,7 @@ function loadDataTable() {
             "datatype": "json"
         },
         "columns": [
+            { "data": "cedula", "width": "20%" },
             { "data": "numeroColegiado", "width": "20%" },
             { "data": "nombreCompleto", "width": "20%" },
             {

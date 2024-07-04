@@ -12,6 +12,25 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Crear nueva cuenta</h2>
             <hr />
+            @if (User.IsInRole(Roles.Admin))
+            {
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.role" asp-items="@Model.Input.roleList" class="form-select">
+                        <option disabled selected> --- Selecccionar Rol --- </option>
+                    </select>
+                </div>
+                <div class="form-floating mb-3" id="numeroColegiadoContainer">
+                    <input asp-for="Input.NumeroColegiado" class="form-control" aria-required="true" />
+                    <label asp-for="Input.NumeroColegiado">Numero de Colegiado</label>
+                    <span asp-validation-for="Input.NumeroColegiado" class="text-danger"></span>
+                </div>
+                <div class="mb-3" id="fotoContainer">
+                    <label asp-for="Input.Foto" class="p-0">Foto</label>
+                    <input id="uploadBox" name="file" type="file" class="form-control" />
+                    <span asp-validation-for="Input.Foto" class="text-danger"></span>
+                </div>
+            }
+
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert" placeholder="Cedula" value=""></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Cedula" class="form-control" aria-required="true" />
@@ -38,24 +57,7 @@
                 <label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            @if (User.IsInRole(Roles.Admin))
-            {
-                <div class="form-floating mb-3">
-                    <select asp-for="Input.role" asp-items="@Model.Input.roleList" class="form-select">
-                        <option disabled selected> --- Selecccionar Rol --- </option>
-                    </select>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.NumeroColegiado" class="form-control" aria-required="true" />
-                    <label asp-for="Input.NumeroColegiado">Numero de Colegiado (En caso de Médico)</label>
-                    <span asp-validation-for="Input.NumeroColegiado" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Input.Foto" class="p-0">Foto (En caso de Médico)</label>
-                    <input id="uploadBox" name="file" type="file" class="form-control" />
-                    <span asp-validation-for="Input.Foto" class="text-danger"></span>
-                </div>
-            }
+           
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrarse</button>
         </form>
     </div>
@@ -63,5 +65,26 @@
 </div>
 
 @section Scripts {
+
+    <script>
+        // Función para manejar el cambio en el input de rol
+        $('#Input_role').change(function () {
+            var selectedRole = $(this).val(); // Obtener el valor seleccionado
+
+            // Mostrar u ocultar los contenedores según el rol seleccionado
+            if (selectedRole === 'Médico') {
+                $('#numeroColegiadoContainer').show();
+                $('#fotoContainer').show();
+            } else {
+                $('#numeroColegiadoContainer').hide();
+                $('#fotoContainer').hide();
+            }
+        });
+
+        // Ejecutar la función al cargar la página para sincronizar el estado inicial
+        $(document).ready(function () {
+            $('#Input_role').trigger('change');
+        });
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }

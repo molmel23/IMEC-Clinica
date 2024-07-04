@@ -379,12 +379,22 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         #region NotasMedicas
         [HttpGet]
 
+        [HttpGet]
         public IActionResult GetNotasMedicas(int id)
         {
             var notasMedicas = _unitOfWork.NotasMedicas.GetAll(includeProperties: "MedicoTratante")
                               .Where(x => x.CedulaPaciente == id).ToList();
-            return Json(new { data = notasMedicas });
+
+            var notasMedicasFormateadas = notasMedicas.Select(n => new
+            {
+                n.Texto,
+                Fecha = n.Fecha.ToString("yyyy-MM-dd HH:mm"),
+                MedicoTratante = n.MedicoTratante
+            });
+
+            return Json(new { data = notasMedicasFormateadas });
         }
+
 
         [HttpGet]
         public IActionResult AgregarNotasMedicas(int? id)
@@ -411,6 +421,10 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AgregarNotasMedicas(ExpedienteVM model)
         {
+
+            // Asignar la fecha actual a la propiedad Fecha
+            model.NotaMedicaVM.NotaMedica.Fecha = DateTime.Now;
+
             _unitOfWork.NotasMedicas.Add(model.NotaMedicaVM.NotaMedica);
             _unitOfWork.Save();
             return RedirectToAction("Expediente", new { id = model.NotaMedicaVM.NotaMedica.CedulaPaciente });

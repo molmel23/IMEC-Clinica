@@ -162,6 +162,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         {
             var medicoTratanteList = _unitOfWork.MedicoTratantes.GetAll().Select(c => new
             {
+                c.Cedula,
                 c.NumeroColegiado,
                 c.NombreCompleto
             });
@@ -215,6 +216,7 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Borrar
         public IActionResult Delete(int? id)
         {
             try
@@ -265,6 +267,6 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Admin.Controllers
                 return Json(new { success = false, message = "No se pudo eliminar el medico" });
             }
         }
-
+        #endregion
     }
 }   
