@@ -10,9 +10,7 @@ using ProyectoProgramadoLenguajes2024.Utilities;
 namespace ProyectoProgramadoLenguajes2024.Areas.Medicina.Controllers
 {
     [Area("Medicina")]
- 
     [Authorize(Roles = Roles.Medico)]
-    
     public class PacienteController : Controller
     {
         #region Properties_Constructor
