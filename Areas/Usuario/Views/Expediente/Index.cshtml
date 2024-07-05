@@ -1,0 +1,52 @@
+﻿@using ProyectoProgramadoLenguajes2024.Models.ViewModels
+
+@{
+    ViewData["Title"] = "Expediente";
+    var pacienteId = ViewData["PacienteId"];
+}
+
+@model ExpedienteVM
+<partial name="_Notifications" />
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Expediente de @Model.PacienteVM.Paciente.NombreCompleto
+            </h2>
+        </div>
+    </div>
+
+    <div class="row pt-4">
+        <div class="col-12 text-end">
+            <a asp-area="Usuario" asp-controller="Expediente" asp-action="ListaPadecimientos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
+                <i class="bi bi-plus-circle"></i> Padecimientos
+            </a>
+            <a asp-area="Usuario" asp-controller="Expediente" asp-action="ListaTratamientos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
+                <i class="bi bi-plus-circle"></i> Tratamientos
+            </a>
+            <a asp-area="Usuario" asp-controller="Expediente" asp-action="ListaMedicamentos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
+                <i class="bi bi-plus-circle"></i> Medicamentos
+            </a>
+            <a asp-area="Usuario" asp-controller="Expediente" asp-action="ListaExamenesMedicos" asp-route-id="@Model.PacienteVM.Paciente.Cedula" class="btn btn-primary mx-2">
+                <i class="bi bi-plus-circle"></i> Exámenes Médicos
+            </a>
+        </div>
+    </div>
+
+    <input type="hidden" id="pacienteId" value="@pacienteId" />
+
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nota</th>
+                <th>Fecha</th>
+                <th>Médico</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/listaNotaMedicaPaciente.js"></script>

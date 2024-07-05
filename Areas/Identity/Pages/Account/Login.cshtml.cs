@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ProyectoProgramadoLenguajes2024.Utilities;
+using ProyectoProgramadoLenguajes2024.Data.Repository.Interfaces;
 
 namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
 {
@@ -22,11 +23,13 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IUnitOfWork unitOfWork)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -124,9 +127,14 @@ namespace ProyectoProgramadoLenguajes2024.Areas.Identity.Pages.Account
                     }
                     else if (User.IsInRole(Roles.Admin))
                     {
-                            returnUrl = Url.Content("~/Admin/Bienvenida/Index");
-                        }
-                    
+                        returnUrl = Url.Content("~/Admin/Bienvenida/Index");
+                    }
+                    else if (User.IsInRole(Roles.Usuario))
+                    {
+                        var paciente = _unitOfWork.Pacientes.Get(x => x.CorreoElectronico == Input.Email);
+                        returnUrl = Url.Content("~/Usuario/Expediente/Index/" + paciente.Cedula);
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
